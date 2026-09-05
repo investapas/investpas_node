@@ -1,0 +1,35 @@
+exports.vals = {
+	required:'Please fill in this field.',
+	terms_required:'Please accept the Terms and Conditions.',
+	min:(param)=>`Value must be greater than ${param-1}`,
+	max:(param)=>`Value must be smaller than ${param-1}`,
+	digits:(param)=>`Value must be ${param} digits`,
+	boolean:'either True or False',
+	
+
+	// max:`At least $param characters.`,
+	same:'Password mismatched.',
+	numeric:'Only numbers.',
+	email:'Enter a valid email.',
+	digits_between_phone:'Between 8-15 digits.',
+	alpha_spaces:'Only contain letters and spaces.',
+	alpha_num:'Special characters not allowed.',
+	email_exist:'Email already exist.',
+	mobile_exist:'Telephone/Mobile already exist.',
+	login_success:'You are successfully logged in.',
+	reg_success:'Thanks for registering with us.',
+	trouble_logging:'Trouble logging, Try forgot password.',
+	not_regstrd:'Account not registered.',
+	not_regstrd_msg:'Account not registered.',
+	inv_credential:'Invalid credential.',
+	inv_postcode:'Enter Valid Postcode.',
+	otpcnfrm:' is your OTP to confirm number.',
+	asap:'As Soon As Possible.',
+	required_without:'Please enter atleast one input',
+	not_in:'value must be greater than 0',
+	same:'Enter matching password',
+	date:'Enter a valid date',
+	time:'Enter a valid time',
+	mimimum_min:"value must be greater than 0"
+
+};
