@@ -1,0 +1,113 @@
+[
+ {
+  "src": "cafe-casa",
+  "name": "Cafe De Casa",
+  "area": "Vijay Nagar",
+  "type": "Premium cafe",
+  "code": "CDC",
+  "offer": true,
+  "drinks": [
+   "Chai",
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "cafe-piccolo",
+  "name": "Piccolo Cafe",
+  "area": "The Emporio, MR-10",
+  "type": "Premium cafe",
+  "code": "PIC",
+  "offer": true,
+  "drinks": [
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "cafe-atb",
+  "name": "Around the Block",
+  "area": "South Tukoganj",
+  "type": "Premium cafe",
+  "code": "ATB",
+  "offer": true,
+  "drinks": [
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "cafe-mamaloca",
+  "name": "Mamaloca",
+  "area": "Vijay Nagar",
+  "type": "Premium cafe",
+  "code": "MML",
+  "offer": true,
+  "drinks": [
+   "Chai",
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "csb-bhawarkuan",
+  "name": "Chai Sutta Bar",
+  "area": "Bhawarkuan",
+  "type": "Busy cafe",
+  "code": "CSB",
+  "offer": true,
+  "drinks": [
+   "Chai",
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "csb-56",
+  "name": "Chai Sutta Bar",
+  "area": "56 Dukan",
+  "type": "Busy cafe",
+  "code": "C56",
+  "offer": true,
+  "drinks": [
+   "Chai"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "csb-annapurna",
+  "name": "Chai Sutta Bar",
+  "area": "Annapurna",
+  "type": "Busy cafe",
+  "code": "CSA",
+  "offer": true,
+  "drinks": [
+   "Chai",
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "cafe-jail",
+  "name": "Jail Cafe",
+  "area": "AB Road, near Holkar College",
+  "type": "Busy cafe",
+  "code": "JCF",
+  "offer": true,
+  "drinks": [
+   "Chai",
+   "Coffee"
+  ],
+  "daily_cap": 15
+ },
+ {
+  "src": "card",
+  "name": "Visiting card",
+  "area": "",
+  "type": "Other",
+  "code": null,
+  "offer": false,
+  "drinks": [],
+  "daily_cap": 0
+ }
+]

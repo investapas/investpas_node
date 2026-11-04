@@ -1,0 +1,732 @@
+{
+ "questions": [
+  {
+   "id": "G1",
+   "cat": "gen",
+   "tag": "MARKET CLOSE · 3:30 PM",
+   "q": "Aapke hisaab se kal Nifty kis direction mein jayega?",
+   "o": [
+    "Upar (bullish)",
+    "Neeche (bearish)",
+    "Kal ke market ke anusaar trade plan banaunga"
+   ],
+   "c": 2,
+   "why": "Market ki direction koi bhi pehle se tay nahi kar sakta. Disciplined trader prediction par nahi, apne trading plan par chalta hai.",
+   "t": "Which way will Nifty go tomorrow?",
+   "ae": "Plan based on tomorrow's market, don't predict it",
+   "we": "Nobody can reliably predict market direction. Disciplined traders follow a plan, not a forecast."
+  },
+  {
+   "id": "G2",
+   "cat": "gen",
+   "tag": "RISK MANAGEMENT",
+   "q": "Ek trade mein apne total trading capital ka kitna risk lena uchit hai?",
+   "o": [
+    "10%",
+    "5%",
+    "1–2%",
+    "Jitna confidence, utna risk"
+   ],
+   "c": 2,
+   "why": "1–2% risk par lagatar 10 losses ke baad bhi aapka capital surakshit rehta hai aur aap trading jaari rakh sakte hain.",
+   "t": "Risk per trade",
+   "ae": "1–2% of total trading capital",
+   "we": "At 1–2% risk, even 10 losses in a row leave your capital largely intact."
+  },
+  {
+   "id": "G3",
+   "cat": "gen",
+   "tag": "WIN RATE",
+   "q": "Ek trader ka win rate 80% hai. Kya woh profitable hai?",
+   "o": [
+    "Haan, 80% win rate ka matlab profit hai",
+    "Zaroori nahi, yeh har loss ke size par nirbhar karta hai",
+    "Haan, agar woh rozana trade kare"
+   ],
+   "c": 1,
+   "why": "8 chhote profits ko 2 bade losses poori tarah khatam kar sakte hain. Sirf win rate se profitability tay nahi hoti.",
+   "t": "Is an 80% win rate profitable?",
+   "ae": "Not necessarily, it depends on the size of each loss",
+   "we": "Two large losses can erase eight small wins. Win rate alone does not decide profitability."
+  },
+  {
+   "id": "G4",
+   "cat": "gen",
+   "tag": "RECOVERY MATH",
+   "q": "₹1,00,000 ke capital par 50% loss ho gaya. Wapas ₹1,00,000 tak pahunchne ke liye kitna return chahiye?",
+   "o": [
+    "50%",
+    "75%",
+    "100%"
+   ],
+   "c": 2,
+   "why": "₹50,000 ko ₹1,00,000 banane ke liye capital double karna hoga. Isliye losses ko chhota rakhna sabse zaroori hai.",
+   "t": "Recovering from a 50% loss",
+   "ae": "100% return",
+   "we": "₹50,000 must double to get back to ₹1,00,000. That is why keeping losses small matters most."
+  },
+  {
+   "id": "G5",
+   "cat": "gen",
+   "tag": "RISK-REWARD",
+   "q": "In do trades mein se kaunsa behtar hai?",
+   "o": [
+    "90% chance ₹100 profit, 10% chance ₹2,000 loss",
+    "40% chance ₹300 profit, 60% chance ₹100 loss"
+   ],
+   "c": 1,
+   "why": "Har 10 trades par pehla trade average ₹1,100 ka nuksaan deta hai, jabki doosra ₹600 ka munafa. Jeetne ki sambhavna se zyada risk-reward ratio mayne rakhta hai.",
+   "t": "Which trade is better?",
+   "ae": "40% chance of +₹300 vs 60% chance of -₹100",
+   "we": "Over 10 trades the first loses about ₹1,100 and the second makes about ₹600. Risk-reward matters more than win probability."
+  },
+  {
+   "id": "G6",
+   "cat": "gen",
+   "tag": "LEVERAGE",
+   "q": "Broker aapko 5x leverage de raha hai. Iska kya matlab hai?",
+   "o": [
+    "Paanch guna profit ka mauka",
+    "Trading ke liye extra paisa",
+    "Profit aur loss, dono paanch guna"
+   ],
+   "c": 2,
+   "why": "Leverage profit ke saath-saath loss ko bhi utna hi badhata hai.",
+   "t": "What 5x leverage means",
+   "ae": "Profit and loss are both multiplied 5x",
+   "we": "Leverage multiplies losses exactly as much as profits."
+  },
+  {
+   "id": "G7",
+   "cat": "gen",
+   "tag": "TIPS GROUP",
+   "q": "Ek Telegram group \"95% accuracy\" ka daava karta hai aur profit ke screenshots share karta hai. Aap kya karenge?",
+   "o": [
+    "Chhoti amount se follow karke dekhunga",
+    "Paid membership le lunga",
+    "Ignore karunga, screenshot koi saboot nahi hai"
+   ],
+   "c": 2,
+   "why": "Profit ke screenshots aasaani se banaye ja sakte hain. \"Guaranteed return\" ka daava apne aap mein ek red flag hai.",
+   "t": "\"95% accuracy\" tips group",
+   "ae": "Ignore it, screenshots are not proof",
+   "we": "Profit screenshots are easy to fake. Any guaranteed-return claim is a red flag."
+  },
+  {
+   "id": "G8",
+   "cat": "gen",
+   "tag": "EMOTIONAL SIGNAL",
+   "q": "Trade ke dauraan aapki dhadkan tez hai aur aap baar-baar P&L check kar rahe hain. Iska kya matlab hai?",
+   "o": [
+    "Yeh normal hai, sabke saath hota hai",
+    "Aapki position size aapki risk capacity se zyada hai",
+    "Market zyada volatile hai"
+   ],
+   "c": 1,
+   "why": "Jo trade aapka mental santulan bigaad de, uski position size aapke liye zyada badi hai.",
+   "t": "Racing heart during a trade",
+   "ae": "Your position size is too big",
+   "we": "If a trade disturbs your calm, the position is too big for you."
+  },
+  {
+   "id": "G9",
+   "cat": "gen",
+   "tag": "DAILY LOSS LIMIT",
+   "q": "Lagatar 3 losses ke baad aaj ki maximum loss limit hit ho gayi hai. Aap kya karenge?",
+   "o": [
+    "Recovery ke liye ek aakhri trade",
+    "Quantity double karke ek hi trade mein recover",
+    "Aaj trading band, kal review"
+   ],
+   "c": 2,
+   "why": "Daily loss limit isi din ke liye banayi jaati hai, jab emotions faisle lene lagte hain.",
+   "t": "Daily maximum loss hit",
+   "ae": "Stop trading for the day and review tomorrow",
+   "we": "A daily loss limit exists for exactly the day when emotions start making decisions."
+  },
+  {
+   "id": "S1",
+   "cat": "scalp",
+   "tag": "SCALPING MATH",
+   "q": "Aapka target ₹20 per lot hai aur stop-loss ₹40 per lot. Breakeven ke liye kitne pratishat trades jeetne honge (charges ke bina)?",
+   "o": [
+    "50%",
+    "60%",
+    "67%"
+   ],
+   "c": 2,
+   "why": "₹20 kamane ke liye ₹40 ka risk lene par har 3 mein se 2 trades jeetna zaroori hai. Charges jodne par yeh aur badh jaata hai.",
+   "t": "Win rate needed: ₹20 target, ₹40 stop-loss",
+   "ae": "About 67%",
+   "we": "Risking ₹40 to make ₹20 means winning 2 of every 3 trades just to break even, more after charges."
+  },
+  {
+   "id": "S2",
+   "cat": "scalp",
+   "tag": "TRADING COST",
+   "q": "Aap rozana 40 scalps lete hain aur har trade par ₹60 charges aur slippage lagta hai. Mahine mein 20 trading din. Sirf kharcha kitna hoga?",
+   "o": [
+    "₹2,400",
+    "₹12,000",
+    "₹48,000"
+   ],
+   "c": 2,
+   "why": "40 × ₹60 × 20 = ₹48,000. Zyada trades mein sabse nishchit kamai brokerage aur charges ki hoti hai.",
+   "t": "Monthly cost of 40 scalps a day",
+   "ae": "₹48,000",
+   "we": "40 trades x ₹60 x 20 days = ₹48,000. With heavy trading, costs are the surest winner."
+  },
+  {
+   "id": "S3",
+   "cat": "scalp",
+   "tag": "LOSING STREAK",
+   "q": "Kuch hi minutes mein lagatar 3 scalps loss mein gaye. Aap kya karenge?",
+   "o": [
+    "Speed badhakar jaldi recover karunga",
+    "Timeframe aur chhota kar dunga",
+    "15 minute ka break lekar screen se door rahunga"
+   ],
+   "c": 2,
+   "why": "Tez losses ke baad dimaag aur tez trades chahta hai. Break hi is cycle ko todta hai.",
+   "t": "3 quick losses in a row",
+   "ae": "Take a 15-minute break",
+   "we": "After fast losses the mind wants faster trades. A break is what breaks the cycle."
+  },
+  {
+   "id": "S4",
+   "cat": "scalp",
+   "tag": "SCALPING ESSENTIAL",
+   "q": "Scalping mein sabse zaroori kya hai?",
+   "o": [
+    "Tez reflexes",
+    "Zyada se zyada trades",
+    "Pehle se tay stop-loss aur target, jinhe trade ke beech na badla jaye"
+   ],
+   "c": 2,
+   "why": "Scalping mein sochne ka samay nahi hota. Niyam trade se pehle tay hone chahiye.",
+   "t": "Most important thing in scalping",
+   "ae": "Stop-loss and target fixed before the trade",
+   "we": "There is no time to think while scalping. Rules must be set before the trade."
+  },
+  {
+   "id": "S5",
+   "cat": "scalp",
+   "tag": "SLIPPAGE",
+   "q": "Aapne stop-loss ₹100 par lagaya, lekin fast market mein order ₹96 par execute hua. Aisa kyun hua?",
+   "o": [
+    "Broker ne galat execution kiya",
+    "Stop-loss ka koi fayda nahi, lagana hi nahi chahiye",
+    "Slippage: fast market mein stop-loss ka exact price guaranteed nahi hota"
+   ],
+   "c": 2,
+   "why": "Isliye position size chhoti rakhein, taaki slippage ke baad bhi loss niyantran mein rahe. Stop-loss hatana iska samadhan nahi hai.",
+   "t": "Stop-loss at ₹100 filled at ₹96",
+   "ae": "Slippage, stop-loss prices are not guaranteed in fast markets",
+   "we": "Keep position size small so losses stay controlled after slippage. Removing the stop-loss is not the fix."
+  },
+  {
+   "id": "S6",
+   "cat": "scalp",
+   "tag": "OVERTRADING",
+   "q": "2 ghante mein 30 trades, aur net P&L ₹0. Iska matlab kya hai?",
+   "o": [
+    "Breakeven hai, koi nuksaan nahi",
+    "Achhi practice ho gayi",
+    "Charges ke baad aap loss mein hain, aur samay va urja bhi gayi"
+   ],
+   "c": 2,
+   "why": "P&L shunya dikhta hai, lekin charges ne paisa le liya. 30 trades ki thakaan bhi ek keemat hai.",
+   "t": "30 trades with zero P&L",
+   "ae": "You are in loss after charges",
+   "we": "Zero P&L before costs is a loss after charges, plus the fatigue of 30 trades."
+  },
+  {
+   "id": "S7",
+   "cat": "scalp",
+   "tag": "PLAN DRIFT",
+   "q": "Aapka scalp galat direction mein gaya. Aapne socha \"thoda aur rukta hoon\", aur ab 10 minute ho gaye hain. Aap kya karenge?",
+   "o": [
+    "Ise swing trade bana ke hold karunga",
+    "Average kar dunga",
+    "Scalp ka plan khatam ho gaya hai, exit karunga"
+   ],
+   "c": 2,
+   "why": "Loss wale scalp ko swing trade banana plan nahi, sirf ummeed hai.",
+   "t": "A losing scalp turned into a hold",
+   "ae": "Exit, the scalp plan is over",
+   "we": "Turning a losing scalp into a swing trade is hope, not a plan."
+  },
+  {
+   "id": "OB1",
+   "cat": "ob",
+   "tag": "TIME DECAY",
+   "q": "Aapne expiry week ke Monday ko option kharida. Wednesday tak Nifty bilkul nahi hila. Aapke option ka kya hua?",
+   "o": [
+    "Price waisa hi hai",
+    "Price badh gaya",
+    "Price gir gaya"
+   ],
+   "c": 2,
+   "why": "Time decay (theta) ki wajah se market na hilne par bhi option buyer ka premium rozana ghatta hai, aur expiry ke paas sabse tezi se.",
+   "t": "Market flat for 3 days, what happened to your option?",
+   "ae": "The option lost value",
+   "we": "Time decay (theta) reduces an option buyer's premium every day, fastest near expiry."
+  },
+  {
+   "id": "OB2",
+   "cat": "ob",
+   "tag": "DIRECTION SAHI, PHIR BHI LOSS",
+   "q": "Nifty aapki direction mein 50 points chala, phir bhi aapka option loss mein hai. Aisa kaise?",
+   "o": [
+    "Broker ki galti",
+    "Market manipulation",
+    "Implied volatility (IV) giri aur time decay hua"
+   ],
+   "c": 2,
+   "why": "Option ka price sirf direction se nahi, volatility aur samay se bhi tay hota hai. IV girne par sahi direction ke bawajood loss ho sakta hai.",
+   "t": "Right direction, still a loss",
+   "ae": "Implied volatility fell and time decay hit",
+   "we": "Options are priced on volatility and time, not just direction. A fall in IV can beat a correct view."
+  },
+  {
+   "id": "OB3",
+   "cat": "ob",
+   "tag": "EVENT DAY",
+   "q": "Results ya Budget se pehle options ke premium kaafi badh jaate hain. Event ke baad aam taur par kya hota hai?",
+   "o": [
+    "Premium aur badh jaata hai",
+    "Premium waisa hi rehta hai",
+    "Premium gir jaata hai (IV crush)"
+   ],
+   "c": 2,
+   "why": "Event ka risk premium mein pehle se shaamil hota hai. Event ke baad yeh risk hat jaata hai aur premium gir jaata hai, chahe market move kare.",
+   "t": "Option premiums after a big event",
+   "ae": "Premiums usually fall (IV crush)",
+   "we": "Event risk is priced in beforehand. Once the event passes, premiums often fall even if the market moves."
+  },
+  {
+   "id": "OB4",
+   "cat": "ob",
+   "tag": "SASTA OPTION",
+   "q": "₹2 ka deep out-of-the-money option \"lottery\" ki tarah kharidna kaisa hai?",
+   "o": [
+    "Sasta hai, isliye risk kam hai",
+    "100 guna ho sakta hai, try karna chahiye",
+    "Yeh sasta isliye hai kyunki profit ki sambhavna bahut kam hai"
+   ],
+   "c": 2,
+   "why": "Aise adhiktar options shunya par expire hote hain. Kam keemat kam probability ka sanket hai.",
+   "t": "Buying a ₹2 far out-of-the-money option",
+   "ae": "It is cheap because it rarely pays off",
+   "we": "Most such options expire worthless. A low price reflects a low probability."
+  },
+  {
+   "id": "OB5",
+   "cat": "ob",
+   "tag": "EXPIRY DAY · 3:00 PM",
+   "q": "Expiry ke din 3 baje, ₹60 mein kharida gaya option ab ₹5 par hai. Aap kya karenge?",
+   "o": [
+    "Hold karunga, aakhri minute mein move aa sakta hai",
+    "Aur kharid kar average karunga",
+    "Bachi hui raashi bachaunga, aur agli baar stop-loss pehle tay karunga"
+   ],
+   "c": 2,
+   "why": "Aakhri minute ke chamatkar ke intezaar mein ₹5 bhi shunya ho jaata hai. Asli galti stop-loss na lagana thi.",
+   "t": "Option bought at ₹60 is ₹5 on expiry day",
+   "ae": "Save what is left and set a stop-loss next time",
+   "we": "Waiting for a last-minute miracle usually turns ₹5 into zero. The real mistake was having no stop-loss."
+  },
+  {
+   "id": "OB6",
+   "cat": "ob",
+   "tag": "MAXIMUM LOSS",
+   "q": "Option buyer ka maximum loss kitna ho sakta hai?",
+   "o": [
+    "Unlimited",
+    "Diye gaye premium jitna",
+    "Premium ka double"
+   ],
+   "c": 1,
+   "why": "Option buyer ka loss premium tak seemit hai. Phir bhi kai traders poora premium gawa dete hain, kyunki woh stop-loss nahi lagate.",
+   "t": "An option buyer's maximum loss",
+   "ae": "The premium paid",
+   "we": "A buyer can lose only the premium, yet many lose all of it because they never use a stop-loss."
+  },
+  {
+   "id": "OB7",
+   "cat": "ob",
+   "tag": "STOP-LOSS PLACEMENT",
+   "q": "Aapne ₹10,000 ka option kharida. Stop-loss kahan lagana chahiye?",
+   "o": [
+    "Stop-loss ki zaroorat nahi, loss pehle se seemit hai",
+    "Premium 90% girne par",
+    "Setup ke anusaar pehle se tay, taaki loss total capital ke 1–2% se zyada na ho"
+   ],
+   "c": 2,
+   "why": "\"Seemit loss\" ka matlab \"chhota loss\" nahi hai. Stop-loss aapke loss ko aapke capital ke anupaat mein chhota rakhta hai.",
+   "t": "Stop-loss on a ₹10,000 option",
+   "ae": "Pre-set so the loss stays within 1–2% of total capital",
+   "we": "A limited loss is not the same as a small loss. A stop-loss keeps it small relative to your capital."
+  },
+  {
+   "id": "OB8",
+   "cat": "ob",
+   "tag": "OPTION BUYING",
+   "q": "Option buying mein profit ke liye kya zaroori hai?",
+   "o": [
+    "Sirf sahi direction",
+    "Sahi direction, sahi timing aur anukool volatility",
+    "Sasta option"
+   ],
+   "c": 1,
+   "why": "Option buyer ke liye teeno cheezein sahi honi chahiye. Isliye position size chhoti aur exit plan pehle se tay rakhein.",
+   "t": "What an option buyer needs to profit",
+   "ae": "Right direction, right timing and favourable volatility",
+   "we": "Option buyers need three things to go right, so keep position size small and exits planned."
+  },
+  {
+   "id": "OS1",
+   "cat": "os",
+   "tag": "SELLER KA PROFIT",
+   "q": "Option seller ka maximum profit kitna ho sakta hai?",
+   "o": [
+    "Unlimited",
+    "Mile hue premium jitna",
+    "Premium ka double"
+   ],
+   "c": 1,
+   "why": "Seller ka profit premium tak seemit hai, isliye ek bada loss kai mahino ka profit khatam kar sakta hai.",
+   "t": "An option seller's maximum profit",
+   "ae": "The premium received",
+   "we": "A seller's profit is capped at the premium, so one large loss can erase months of gains."
+  },
+  {
+   "id": "OS2",
+   "cat": "os",
+   "tag": "NAKED SELLING",
+   "q": "Bina hedge ke (naked) option sell karne par maximum loss kitna ho sakta hai?",
+   "o": [
+    "Mile hue premium jitna",
+    "Block hue margin jitna",
+    "Bahut bada, margin se bhi zyada"
+   ],
+   "c": 2,
+   "why": "Bade gap ya crash mein naked selling ka loss block hue margin se bhi zyada ho sakta hai.",
+   "t": "Maximum loss on a naked short option",
+   "ae": "Very large, even beyond the margin",
+   "we": "In a big gap or crash, a naked seller can lose more than the margin blocked."
+  },
+  {
+   "id": "OS3",
+   "cat": "os",
+   "tag": "CONSISTENT PREMIUM",
+   "q": "Aapne 30 din lagatar chhota premium kamaya. 31ve din market mein bada gap aaya. Is strategy ka sach kya hai?",
+   "o": [
+    "Seller hamesha jeetta hai",
+    "30 din ka profit surakshit hai",
+    "Ek bada din poore mahine ka profit khatam kar sakta hai"
+   ],
+   "c": 2,
+   "why": "Lagatar chhote profits aur kabhi-kabhi bada nuksaan, bina hedge ke option selling ka yahi swabhav hai.",
+   "t": "30 days of small profits, then a gap",
+   "ae": "One big day can erase a month of profits",
+   "we": "Steady small gains with rare large losses is the nature of unhedged selling."
+  },
+  {
+   "id": "OS4",
+   "cat": "os",
+   "tag": "PREMIUM DOUBLE",
+   "q": "Aapke sell kiye gaye option ka premium ₹50 se ₹100 ho gaya. Aap kya karenge?",
+   "o": [
+    "Hold karunga, expiry tak gir jayega",
+    "Aur sell karunga, behtar price mil raha hai",
+    "Pehle se tay stop-loss par exit ya hedge karunga"
+   ],
+   "c": 2,
+   "why": "Loss wali position mein aur sell karna galti ko double karna hai. Option seller ka stop-loss bhi pehle se tay hona chahiye.",
+   "t": "Sold premium doubled from ₹50 to ₹100",
+   "ae": "Exit or hedge at your pre-set stop-loss",
+   "we": "Adding to a losing short doubles the mistake. Sellers need a pre-set stop-loss too."
+  },
+  {
+   "id": "OS5",
+   "cat": "os",
+   "tag": "HEDGING",
+   "q": "Option selling mein hedge (protective option kharidna) kyun zaroori hai?",
+   "o": [
+    "Zaroori nahi, isse profit kam hota hai",
+    "Sirf naye traders ke liye hai",
+    "Bade gap mein loss seemit karta hai, aur aksar margin bhi kam lagta hai"
+   ],
+   "c": 2,
+   "why": "Hedge thoda profit kam karta hai, lekin account ko ek bure din se bachata hai.",
+   "t": "Why hedge when selling options?",
+   "ae": "It caps losses in a big gap and often lowers margin",
+   "we": "A hedge costs a little profit but protects the account from one disastrous day."
+  },
+  {
+   "id": "OS6",
+   "cat": "os",
+   "tag": "RBI POLICY DAY",
+   "q": "RBI policy ya results ke din bina hedge ke straddle sell karna kaisa hai?",
+   "o": [
+    "Premium zyada hai, isliye sabse achha din",
+    "ATM strike ho toh surakshit hai",
+    "Sabse risky din, bada move kisi bhi direction mein aa sakta hai"
+   ],
+   "c": 2,
+   "why": "Premium isliye zyada hai kyunki risk zyada hai. Event ke din naked selling sabse khatarnak hoti hai.",
+   "t": "Selling a naked straddle on event day",
+   "ae": "The riskiest day, a big move can come either way",
+   "we": "Premiums are high because risk is high. Event days are the worst time for naked selling."
+  },
+  {
+   "id": "OS7",
+   "cat": "os",
+   "tag": "WIN RATE TRAP",
+   "q": "Ek option seller ka win rate 85% hai, phir bhi account loss mein hai. Kyun?",
+   "o": [
+    "Market rigged hai",
+    "Broker charges ki wajah se",
+    "Chhote profits aur kabhi-kabhi bahut bade losses"
+   ],
+   "c": 2,
+   "why": "Account ki growth win rate se nahi, profit aur loss ke size ke anupaat se tay hoti hai.",
+   "t": "85% win rate but the account is down",
+   "ae": "Small wins and occasional very large losses",
+   "we": "The size of wins versus losses, not the win rate, decides if an account grows."
+  },
+  {
+   "id": "SW1",
+   "cat": "swing",
+   "tag": "RISK-REWARD",
+   "q": "Aapka stop-loss ₹50 neeche aur target ₹100 upar hai. Breakeven ke liye kam se kam kitne pratishat trades jeetne honge (charges ke bina)?",
+   "o": [
+    "67%",
+    "50%",
+    "Lagbhag 34%"
+   ],
+   "c": 2,
+   "why": "1:2 risk-reward ratio par har 3 mein se 1 trade jeetna bhi breakeven hai. Achha risk-reward kam win rate mein bhi kaam karta hai.",
+   "t": "Win rate needed: ₹50 stop-loss, ₹100 target",
+   "ae": "About 34%",
+   "we": "At 1:2 risk-reward, winning 1 in 3 already breaks even. Good risk-reward forgives a low win rate."
+  },
+  {
+   "id": "SW2",
+   "cat": "swing",
+   "tag": "GAP DOWN",
+   "q": "Raat mein negative news aayi aur stock aapke stop-loss se neeche gap-down khula. Aap kya karenge?",
+   "o": [
+    "Gap fill hone ka intezaar karunga",
+    "Average karunga",
+    "Plan ke anusaar exit karunga, gap risk swing trading ka hissa hai"
+   ],
+   "c": 2,
+   "why": "Overnight gap mein stop-loss apne price par kaam nahi karta, isliye swing trading mein position size chhoti rakhi jaati hai.",
+   "t": "Gap down below your stop-loss",
+   "ae": "Exit as per plan, gap risk is part of swing trading",
+   "we": "A stop-loss cannot protect against overnight gaps, which is why swing positions stay small."
+  },
+  {
+   "id": "SW3",
+   "cat": "swing",
+   "tag": "PROFIT PROTECTION",
+   "q": "Aapka trade profit mein hai, lekin target se pehle market kamzor dikh raha hai. Aap kya karenge?",
+   "o": [
+    "Kuch nahi, target hi final hai",
+    "Turant poori position exit karunga",
+    "Trailing stop-loss lagaunga"
+   ],
+   "c": 2,
+   "why": "Trailing stop-loss se profit surakshit hota hai aur aage ka move bhi miss nahi hota.",
+   "t": "In profit but the market is weakening",
+   "ae": "Use a trailing stop-loss",
+   "we": "A trailing stop-loss locks in profit while keeping the upside open."
+  },
+  {
+   "id": "SW4",
+   "cat": "swing",
+   "tag": "DIVERSIFICATION",
+   "q": "Aapki 5 swing positions ek hi sector ke stocks mein hain. Kya yeh diversified portfolio hai?",
+   "o": [
+    "Haan, 5 alag stocks hain",
+    "Haan, agar sab large cap hain",
+    "Nahi, yeh sab ek saath gir sakte hain"
+   ],
+   "c": 2,
+   "why": "Ek hi sector ke 5 stocks asal mein ek hi bet ke 5 hisse hain.",
+   "t": "5 positions in one sector",
+   "ae": "Not diversified, they can fall together",
+   "we": "Five stocks in one sector are five parts of the same bet."
+  },
+  {
+   "id": "SW5",
+   "cat": "swing",
+   "tag": "TRADE BANA INVESTMENT",
+   "q": "Aapka swing trade 2 hafton se loss mein hai, aur aap ise \"long-term investment\" banane ki soch rahe hain. Yeh kya hai?",
+   "o": [
+    "Samajhdaari bhari long-term soch",
+    "Dhairya",
+    "Ummeed. Naam badalne se loss nahi badalta."
+   ],
+   "c": 2,
+   "why": "Trade ka plan fail ho chuka hai. Use investment kehna sirf loss ko chhupana hai.",
+   "t": "Turning a losing swing trade into an investment",
+   "ae": "That is hope, renaming the trade changes nothing",
+   "we": "The plan has failed. Calling a losing trade an investment only hides the loss."
+  },
+  {
+   "id": "SW6",
+   "cat": "swing",
+   "tag": "NEWS-BASED TRADES",
+   "q": "Weekend par 3 ghante news padhne ke baad aapne Monday ke liye 6 naye trades plan kiye. Aap kya karenge?",
+   "o": [
+    "Research ki hai, sabhi trades lunga",
+    "Sabse achhe 2 trades lunga",
+    "Sirf wahi trades lunga jo mere likhe hue setup se match karein"
+   ],
+   "c": 2,
+   "why": "News padhne se confidence aata hai, edge nahi. Trade tabhi lein jab woh aapke setup se match kare.",
+   "t": "6 trades planned after weekend news reading",
+   "ae": "Only those that match your written setup",
+   "we": "Reading news builds confidence, not an edge. Trade only what fits your setup."
+  },
+  {
+   "id": "SW7",
+   "cat": "swing",
+   "tag": "BEST HABIT",
+   "q": "Swing trader ki sabse upyogi aadat kaunsi hai?",
+   "o": [
+    "Har ghante chart check karna",
+    "Har trade ka journal: entry ka kaaran, exit aur emotion",
+    "Zyada stocks track karna"
+   ],
+   "c": 1,
+   "why": "Journal aapko aapki apni dohrayi hui galtiyan dikhata hai. Yeh sabse sasta aur sabse achha teacher hai.",
+   "t": "Most useful swing trading habit",
+   "ae": "A journal of every trade: reason, exit and emotion",
+   "we": "A journal shows you your own repeated mistakes. It is the cheapest teacher you will have."
+  },
+  {
+   "id": "LT1",
+   "cat": "lt",
+   "tag": "MARKET CORRECTION",
+   "q": "Market 20% gir gaya hai. Ek long-term investor ko kya karna chahiye?",
+   "o": [
+    "Ghabrakar sab bech dena",
+    "Aage se investment band kar dena",
+    "Plan ke anusaar SIP aur asset allocation jaari rakhna"
+   ],
+   "c": 2,
+   "why": "Long-term mein correction saamanya hai. Ghabrahat mein bechna hi asli loss ko pakka karta hai.",
+   "t": "The market falls 20%",
+   "ae": "Continue your SIP and allocation as planned",
+   "we": "Corrections are normal over the long term. Panic selling is what locks in the loss."
+  },
+  {
+   "id": "LT2",
+   "cat": "lt",
+   "tag": "COMPOUNDING",
+   "q": "₹10,000 maasik SIP, 20 saal tak, agar saalana 12% return mile. Lagbhag kitni raashi banegi?",
+   "o": [
+    "₹24 lakh",
+    "₹50 lakh",
+    "Lagbhag ₹1 crore"
+   ],
+   "c": 2,
+   "why": "Aapka kul nivesh sirf ₹24 lakh hai, baaki compounding ka parinaam hai. Return guaranteed nahi hote, lekin samay aur anushasan sabse bade karak hain.",
+   "t": "₹10,000 monthly SIP for 20 years at 12% a year",
+   "ae": "Around ₹1 crore",
+   "we": "You invest only ₹24 lakh; compounding does the rest. Returns are not guaranteed, but time and discipline matter most."
+  },
+  {
+   "id": "LT3",
+   "cat": "lt",
+   "tag": "VALUE TRAP",
+   "q": "Aapne stock ₹500 par kharida tha, ab woh ₹300 par hai. Kya yeh \"sasta\" hai?",
+   "o": [
+    "Haan, 40% discount par hai",
+    "Haan, aur kharidna chahiye",
+    "Zaroori nahi. Price girna sasta hone ka saboot nahi, business ki jaanch karein."
+   ],
+   "c": 2,
+   "why": "Price girne ka kaaran business ka kamzor hona bhi ho sakta hai. Sasta aur kamzor company mein fark samjhein.",
+   "t": "Stock fell from ₹500 to ₹300, is it cheap?",
+   "ae": "Not necessarily, check the business",
+   "we": "A falling price may mean a weaker business. Cheap and broken look the same on a chart."
+  },
+  {
+   "id": "LT4",
+   "cat": "lt",
+   "tag": "PORTFOLIO MONITORING",
+   "q": "Kya long-term portfolio rozana check karna chahiye?",
+   "o": [
+    "Haan, zaroori hai",
+    "Har ghante",
+    "Nahi, rozana dekhne se emotional faisle badhte hain"
+   ],
+   "c": 2,
+   "why": "Rozana ke utaar-chadhaav long-term plan ko kamzor karte hain. Quarterly review kaafi hai.",
+   "t": "Checking a long-term portfolio daily",
+   "ae": "No, a quarterly review is enough",
+   "we": "Daily swings shake long-term plans. Reviewing every quarter is enough."
+  },
+  {
+   "id": "LT5",
+   "cat": "lt",
+   "tag": "PENNY STOCK TIP",
+   "q": "Ek dost ne penny stock ke baare mein kaha: \"10 guna pakka hai\". Aap kya karenge?",
+   "o": [
+    "Thoda invest kar dunga",
+    "Poora invest kar dunga",
+    "Research ke bina nahi. \"Pakka\" shabd hi chetavni hai."
+   ],
+   "c": 2,
+   "why": "\"Guaranteed\" ya \"pakka\" return ka daava red flag hai. Pump-and-dump schemes aksar aise hi shuru hoti hain.",
+   "t": "A friend's \"sure 10x\" penny stock",
+   "ae": "Not without research, \"sure\" is a warning sign",
+   "we": "Any guaranteed-return claim is a red flag. Pump-and-dump schemes often start exactly like this."
+  },
+  {
+   "id": "LT6",
+   "cat": "lt",
+   "tag": "CONCENTRATION RISK",
+   "q": "Aapke portfolio ka 50% ek hi stock mein hai, jo 3 guna ho chuka hai. Aap kya karenge?",
+   "o": [
+    "Hold karunga, yeh winner hai",
+    "Aur kharidunga",
+    "Rebalancing par vichaar karunga, ek stock par itni nirbharta risk hai"
+   ],
+   "c": 2,
+   "why": "Ek stock ki ek negative khabar aadhe portfolio ko prabhavit kar sakti hai. Profit ko surakshit karna bhi discipline hai.",
+   "t": "50% of the portfolio in one stock that tripled",
+   "ae": "Consider rebalancing",
+   "we": "One piece of bad news could hit half your portfolio. Protecting profits is discipline too."
+  },
+  {
+   "id": "LT7",
+   "cat": "lt",
+   "tag": "SABSE BADA RISK",
+   "q": "Ek long-term investor ka sabse bada dushman kaun hai?",
+   "o": [
+    "Market crash",
+    "Inflation",
+    "Apna vyavhaar: ghabrahat mein bechna aur trend ke peeche bhaagna"
+   ],
+   "c": 2,
+   "why": "Market ne kai baar recover kiya hai. Investors ko sabse zyada nuksaan aksar unke apne galat samay par liye gaye faislon se hota hai.",
+   "t": "A long-term investor's biggest enemy",
+   "ae": "Their own behaviour: panic selling and chasing trends",
+   "we": "Investors often lose most through their own badly timed decisions, not the market."
+  }
+ ],
+ "categories": {
+  "gen": "Sabhi traders ke liye",
+  "scalp": "Scalper",
+  "ob": "Option buyer",
+  "os": "Option seller",
+  "swing": "Swing trader",
+  "lt": "Long-term investor"
+ }
+}

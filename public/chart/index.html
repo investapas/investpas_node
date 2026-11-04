@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Investapas Chart</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #131722; }
+    #tv_chart_container { width: 100%; height: 100%; }
+
+    /* Loading overlay */
+    #loading {
+      position: fixed; inset: 0;
+      background: #131722;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 9999;
+      color: #fff; font-family: sans-serif;
+    }
+    #loading .spinner {
+      width: 40px; height: 40px;
+      border: 3px solid #2962ff33;
+      border-top-color: #2962ff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Library missing notice */
+    #lib_missing {
+      display: none;
+      position: fixed; inset: 0;
+      background: #131722;
+      align-items: center; justify-content: center;
+      flex-direction: column;
+      color: #d1d4dc; font-family: sans-serif;
+      text-align: center; padding: 24px;
+    }
+    #lib_missing h2 { color: #2962ff; margin-bottom: 12px; font-size: 20px; }
+    #lib_missing p  { font-size: 14px; line-height: 1.7; color: #787b86; }
+    #lib_missing code {
+      background: #1e222d; color: #26a69a;
+      padding: 2px 8px; border-radius: 4px; font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <span>Loading chart…</span>
+</div>
+
+<div id="lib_missing">
+  <h2>TradingView Library Not Installed</h2>
+  <p>
+    Place the <code>charting_library</code> folder inside<br>
+    <code>public/chart/charting_library/</code><br><br>
+    Apply for a free license at<br>
+    <a href="https://www.tradingview.com/HTML5-stock-forex-bitcoin-charting-library/"
+       style="color:#2962ff">tradingview.com/charting-library</a>
+  </p>
+</div>
+
+<div id="tv_chart_container"></div>
+
+<!--
+  ┌──────────────────────────────────────────────────────────────────────┐
+  │  After you receive the TradingView Charting Library from TradingView, │
+  │  copy the entire charting_library/ folder into public/chart/         │
+  │  and uncomment the script tag below.                                 │
+  └──────────────────────────────────────────────────────────────────────┘
+-->
+<!-- <script src="/chart/charting_library/charting_library.standalone.js"></script> -->
+
+<script>
+  // ── Read URL params (Flutter passes token + symbol via query string) ────────
+  const params     = new URLSearchParams(window.location.search);
+  const authToken  = params.get('token')  || '';
+  const initSymbol = params.get('symbol') || 'NSE_EQ:13';   // default: HDFC Bank
+  const theme      = params.get('theme')  || 'dark';        // 'dark' | 'light'
+
+  // ── UDF Datafeed ─────────────────────────────────────────────────────────────
+  // The datafeed calls your Node.js backend which in turn calls Dhan API.
+  // Base URL is relative so it works on any domain / port.
+  const DATAFEED_URL = '/chart/datafeed';
+
+  const Datafeed = {
+    onReady(cb) {
+      fetch(`${DATAFEED_URL}/config`)
+        .then(r => r.json())
+        .then(cfg => setTimeout(() => cb(cfg), 0))
+        .catch(() => setTimeout(() => cb({}), 0));
+    },
+
+    searchSymbols(userInput, exchange, symbolType, onResult) {
+      fetch(`${DATAFEED_URL}/search?query=${encodeURIComponent(userInput)}&exchange=${exchange}&limit=20`)
+        .then(r => r.json())
+        .then(onResult)
+        .catch(() => onResult([]));
+    },
+
+    resolveSymbol(symbolName, onResolve, onError) {
+      fetch(`${DATAFEED_URL}/symbols?symbol=${encodeURIComponent(symbolName)}`)
+        .then(r => r.json())
+        .then(info => {
+          if (info.s === 'error') onError(info.errmsg || 'Symbol not found');
+          else onResolve(info);
+        })
+        .catch(e => onError(e.message));
+    },
+
+    getBars(symbolInfo, resolution, periodParams, onResult, onError) {
+      const { from, to, firstDataRequest } = periodParams;
+      const url = `${DATAFEED_URL}/history`
+        + `?symbol=${encodeURIComponent(symbolInfo.ticker)}`
+        + `&resolution=${resolution}&from=${from}&to=${to}`;
+
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          if (data.s === 'no_data') { onResult([], { noData: true }); return; }
+          if (data.s === 'error')   { onError(data.errmsg); return; }
+
+          const bars = data.t.map((t, i) => ({
+            time:   t * 1000,
+            open:   data.o[i],
+            high:   data.h[i],
+            low:    data.l[i],
+            close:  data.c[i],
+            volume: data.v[i],
+          }));
+          onResult(bars, { noData: bars.length === 0 });
+        })
+        .catch(e => onError(e.message));
+    },
+
+    subscribeBars(symbolInfo, resolution, onTick, listenerGuid) {
+      // Real-time updates via Dhan WebSocket can be wired here.
+      // For now polling every 5 seconds for live candle.
+      const poll = setInterval(async () => {
+        const now  = Math.floor(Date.now() / 1000);
+        const from = now - 120;
+        const url  = `${DATAFEED_URL}/history`
+          + `?symbol=${encodeURIComponent(symbolInfo.ticker)}`
+          + `&resolution=${resolution}&from=${from}&to=${now}`;
+        try {
+          const r    = await fetch(url);
+          const data = await r.json();
+          if (data.s === 'ok' && data.t.length > 0) {
+            const last = data.t.length - 1;
+            onTick({
+              time:   data.t[last] * 1000,
+              open:   data.o[last],
+              high:   data.h[last],
+              low:    data.l[last],
+              close:  data.c[last],
+              volume: data.v[last],
+            });
+          }
+        } catch(_) {}
+      }, 5000);
+
+      window._tvPollers = window._tvPollers || {};
+      window._tvPollers[listenerGuid] = poll;
+    },
+
+    unsubscribeBars(listenerGuid) {
+      if (window._tvPollers && window._tvPollers[listenerGuid]) {
+        clearInterval(window._tvPollers[listenerGuid]);
+        delete window._tvPollers[listenerGuid];
+      }
+    },
+  };
+
+  // ── Init TradingView widget ───────────────────────────────────────────────────
+  function initChart() {
+    if (typeof TradingView === 'undefined') {
+      document.getElementById('loading').style.display    = 'none';
+      document.getElementById('lib_missing').style.display = 'flex';
+      return;
+    }
+
+    const widget = new TradingView.widget({
+      container:          'tv_chart_container',
+      locale:             'en',
+      datafeed:           Datafeed,
+      library_path:       '/chart/charting_library/',
+      symbol:             initSymbol,
+      interval:           'D',
+      theme:              theme === 'light' ? 'Light' : 'Dark',
+      fullscreen:         true,
+      autosize:           true,
+      timezone:           'Asia/Kolkata',
+
+      // Disable features irrelevant for mobile
+      disabled_features: [
+        'header_symbol_search',      // Flutter handles search natively
+        'use_localstorage_for_settings',
+      ],
+      enabled_features: [
+        'study_templates',
+        'side_toolbar_in_fullscreen_mode',
+        'items_favoriting',
+      ],
+
+      overrides: {
+        'mainSeriesProperties.candleStyle.upColor':       '#26a69a',
+        'mainSeriesProperties.candleStyle.downColor':     '#ef5350',
+        'mainSeriesProperties.candleStyle.borderUpColor': '#26a69a',
+        'mainSeriesProperties.candleStyle.borderDownColor': '#ef5350',
+      },
+    });
+
+    widget.onChartReady(() => {
+      document.getElementById('loading').style.display = 'none';
+
+      // Expose functions Flutter can call via evaluateJavascript
+      window.tvWidget = widget;
+
+      window.changeSymbol = function(symbolStr, resolution) {
+        widget.chart().setSymbol(symbolStr, resolution || 'D');
+      };
+
+      window.getChartTheme = function() {
+        return theme;
+      };
+
+      // Notify Flutter that chart is ready
+      if (window.FlutterBridge) {
+        window.FlutterBridge.postMessage(JSON.stringify({ event: 'chartReady' }));
+      }
+    });
+  }
+
+  // Wait for library to load (it loads via the <script> tag above)
+  window.addEventListener('load', () => {
+    // Small delay so the charting_library script can register TradingView global
+    setTimeout(initChart, 300);
+  });
+</script>
+
+</body>
+</html>

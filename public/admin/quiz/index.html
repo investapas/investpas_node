@@ -1,0 +1,520 @@
+<title>Investapas Quiz Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#F3F4F8; --panel:#FFFFFF; --fg:#151A2E; --muted:#5D6479; --faint:#8A90A3; --line:#E1E4EC; --hover:#F1F3FA;
+  --accent:#1E3DFF; --accent-soft:#E8ECFF; --accent-ink:#FFFFFF; --hl:#FFD60A;
+  --good:#0E8A4F; --good-bg:#E4F6EC; --warn:#A35F00; --warn-bg:#FFF2DB; --bad:#C2271B; --bad-bg:#FDE8E6;
+  --bar:#1E3DFF; --track:#E9ECF4;
+  --sans:'Plus Jakarta Sans',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E111B; --panel:#161A28; --fg:#E9ECF5; --muted:#A3A9BC; --faint:#7D8399; --line:#272C3E; --hover:#1D2233;
+  --accent:#7D92FF; --accent-soft:#1F2650; --accent-ink:#0E111B; --hl:#FFD60A;
+  --good:#4CD38C; --good-bg:#12301F; --warn:#F2B04A; --warn-bg:#33270F; --bad:#FF7A6E; --bad-bg:#3A1714;
+  --bar:#7D92FF; --track:#232839; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E111B; --panel:#161A28; --fg:#E9ECF5; --muted:#A3A9BC; --faint:#7D8399; --line:#272C3E; --hover:#1D2233;
+  --accent:#7D92FF; --accent-soft:#1F2650; --accent-ink:#0E111B; --hl:#FFD60A;
+  --good:#4CD38C; --good-bg:#12301F; --warn:#F2B04A; --warn-bg:#33270F; --bad:#FF7A6E; --bad-bg:#3A1714;
+  --bar:#7D92FF; --track:#232839; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14.5px;line-height:1.5;margin:0}
+/* .loginwrap/.shell set their own `display`, which otherwise beats the
+   browser's default [hidden]{display:none} — this keeps hidden authoritative. */
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.rail{background:var(--panel);border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+.logo{display:flex;align-items:center;gap:10px;padding:0 8px 18px;font-weight:800;font-size:17px;letter-spacing:-.2px}
+.logo i{width:30px;height:30px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-style:normal;font-size:15px}
+.logo small{display:block;font-weight:600;font-size:11.5px;color:var(--muted);letter-spacing:.3px}
+.nav{appearance:none;border:0;background:none;text-align:left;padding:10px 12px;border-radius:9px;font-weight:600;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:10px}
+.nav svg{width:18px;height:18px;flex:none}
+.nav:hover{background:var(--hover);color:var(--fg)}
+.nav[aria-current="page"]{background:var(--accent-soft);color:var(--accent)}
+.rail .note{margin-top:auto;font-size:12px;color:var(--faint);padding:10px 8px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.rail .note button{align-self:flex-start;color:var(--bad);font-weight:700;background:none;border:0;cursor:pointer;padding:0}
+
+.main{min-width:0;padding-block:24px 48px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:18px}
+.head h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.4px}
+.head p{margin:2px 0 0;color:var(--muted)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{appearance:none;border:0;background:none;padding:6px 12px;border-radius:7px;font-weight:600;font-size:13px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.sel,.inp{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:13.5px;min-width:0}
+.inp{min-width:220px}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.tile .k{font-size:12.5px;font-weight:600;color:var(--muted)}
+.tile .v{font-size:28px;font-weight:800;letter-spacing:-.6px;margin-top:2px;font-variant-numeric:tabular-nums}
+.tile .s{font-size:12px;color:var(--faint);margin-top:2px}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:18px;min-width:0}
+.card .ch{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.card .ch h2{margin:0;font-size:15.5px;font-weight:700}
+.card .ch span{font-size:12.5px;color:var(--muted)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+th{text-align:left;font-size:11.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--faint);padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--panel)}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover{background:var(--hover)}
+.pl b{display:block;font-weight:700}
+.pl small{color:var(--muted)}
+.barcell{min-width:170px}
+.barwrap{display:flex;align-items:center;gap:10px}
+.track{flex:1;height:8px;background:var(--track);border-radius:4px;overflow:hidden;min-width:80px}
+.track i{display:block;height:100%;background:var(--bar);border-radius:4px}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px}
+.pill.good{color:var(--good);background:var(--good-bg)} .pill.warn{color:var(--warn);background:var(--warn-bg)} .pill.bad{color:var(--bad);background:var(--bad-bg)} .pill.mute{color:var(--muted);background:var(--hover)}
+.mono{font-family:var(--mono);font-size:12.5px}
+.score{display:inline-flex;align-items:baseline;gap:2px;font-weight:800}
+.score small{color:var(--faint);font-weight:600}
+.empty{padding:28px;text-align:center;color:var(--muted)}
+.loadmore{display:block;width:100%;padding:12px;border:0;background:none;border-top:1px solid var(--line);font-weight:700;color:var(--accent);cursor:pointer}
+
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.place{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start}
+.place .qrb{width:96px;height:96px;background:#fff;border-radius:8px;padding:5px;border:1px solid var(--line);display:grid;place-items:center}
+.place .qrb img{width:100%!important;height:auto!important;display:block}
+.place h3{margin:0;font-size:15px;font-weight:700}
+.place .meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.place .link{font-family:var(--mono);font-size:11.5px;color:var(--accent);word-break:break-all;margin-top:6px}
+.place .row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.place .stats{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;border-top:1px solid var(--line);padding-top:10px;font-variant-numeric:tabular-nums}
+.place .stats div{font-size:12px;color:var(--muted)} .place .stats b{display:block;font-size:17px;color:var(--fg)}
+.place .acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.btn{appearance:none;border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:8px 12px;font-weight:700;font-size:13px;cursor:pointer}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.danger{color:var(--bad)}
+
+.formgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0}
+.form{padding:18px;display:grid;gap:14px;border-right:1px solid var(--line)}
+.form label{display:grid;gap:6px;font-weight:600;font-size:13px}
+.form label small{font-weight:500;color:var(--muted)}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form input[type=text],.form input[type=number],.form select{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px;width:100%}
+.checks{display:flex;gap:14px;flex-wrap:wrap;font-weight:500!important}
+.checks label{display:flex!important;align-items:center;gap:7px;font-weight:500}
+.switch{display:flex!important;align-items:center;gap:10px;font-weight:600}
+.switch input{width:18px;height:18px;accent-color:var(--accent)}
+.preview{padding:18px;display:grid;gap:12px;align-content:start;justify-items:center;text-align:center;background:var(--bg);border-radius:0 0 14px 0}
+.preview .pname{font-weight:800;font-size:16px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;text-align:left;font-size:13px;width:100%;max-width:300px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;font-family:var(--mono);font-size:12.5px;word-break:break-all}
+.err{color:var(--bad);font-size:12.5px;font-weight:600;min-height:16px}
+
+.scrim{position:fixed;inset:0;background:rgba(10,12,22,.45);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--panel);z-index:41;overflow-y:auto;border-left:1px solid var(--line);padding:20px max(20px,env(safe-area-inset-right,0px)) 32px 22px;box-shadow:-20px 0 40px rgba(0,0,0,.15)}
+.drawer h2{margin:0;font-size:20px;font-weight:800}
+.drawer .close{float:right}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.dgrid div{background:var(--bg);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--muted)}
+.dgrid b{display:block;color:var(--fg);font-size:14.5px}
+.ans{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
+.ans .q{font-weight:600}
+.ans .r{margin-top:6px;font-size:13px;color:var(--muted)}
+.ans .r b{color:var(--fg)}
+
+.counter{max-width:520px}
+.counter .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.counter .big{display:flex;gap:10px}
+.counter .big input{flex:1;font-family:var(--mono);font-size:22px;letter-spacing:2px;text-transform:uppercase;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);min-width:0}
+.result{margin-top:16px;border-radius:14px;padding:16px;border:1px solid var(--line);background:var(--panel)}
+.result h3{margin:0 0 4px;font-size:18px}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:13.5px;z-index:60;max-width:calc(100% - 32px)}
+
+.loginwrap{min-height:100vh;display:grid;place-items:center;padding:24px}
+.loginbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px;width:100%;max-width:360px}
+.loginbox h1{margin:0 0 4px;font-size:20px}
+.loginbox p{margin:0 0 18px;color:var(--muted);font-size:13.5px}
+.loginbox label{display:grid;gap:6px;font-weight:600;font-size:13px;margin-bottom:12px}
+.loginbox input{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 11px}
+
+@media (max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .rail{position:sticky;top:env(safe-area-inset-top,0px);height:auto;flex-direction:row;overflow-x:auto;padding:10px max(12px,env(safe-area-inset-left,0px));gap:4px;z-index:30;border-right:0;border-bottom:1px solid var(--line)}
+  .logo,.rail .note{display:none}
+  .nav{white-space:nowrap;padding:8px 12px}
+  .main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .formgrid{grid-template-columns:minmax(0,1fr)}
+  .form{border-right:0;border-bottom:1px solid var(--line)}
+  .form .two{grid-template-columns:1fr}
+  .counter .two{grid-template-columns:1fr}
+  .inp{min-width:0;flex:1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="loginwrap" id="loginWrap" hidden>
+  <div class="loginbox">
+    <h1>Investapas Quiz Admin</h1>
+    <p>Sign in with your admin account.</p>
+    <form id="loginForm" novalidate>
+      <label for="lEmail">Email<input id="lEmail" type="email" autocomplete="username" required></label>
+      <label for="lPass">Password<input id="lPass" type="password" autocomplete="current-password" required></label>
+      <div class="err" id="lErr" role="alert"></div>
+      <button class="btn primary" type="submit" style="width:100%">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<div class="shell" id="appShell" hidden>
+  <nav class="rail" aria-label="Sections">
+    <div class="logo"><i>I</i><div>Investapas<small>Quiz &amp; Places admin</small></div></div>
+    <button class="nav" data-view="dash" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Dashboard</button>
+    <button class="nav" data-view="players"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 11a3 3 0 1 0 0-6M22 21a6 6 0 0 0-4-5.6"/></svg>Players</button>
+    <button class="nav" data-view="places"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Places &amp; QR codes</button>
+    <button class="nav" data-view="counter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16v10H4zM8 7V5h8v2M9 12h6"/></svg>Token check</button>
+    <div class="note"><span id="whoami"></span><button type="button" id="logoutBtn">Sign out</button></div>
+  </nav>
+
+  <main class="main">
+    <!-- DASHBOARD -->
+    <section id="v-dash">
+      <div class="head">
+        <div><h1>Dashboard</h1><p>Which places bring the most players, registrations and mentorship requests.</p></div>
+        <div class="filters"><div class="seg" data-range></div></div>
+      </div>
+      <div class="tiles" id="tiles"></div>
+      <div class="card">
+        <div class="ch"><h2>Traffic by place</h2><span>Sorted by completed quizzes. Click a place to see its players.</span></div>
+        <div class="tw"><table id="placeTable"><thead><tr>
+          <th>Place</th><th class="num">QR scans</th><th class="num">Completed</th><th>Completion rate</th><th class="num">Drinks given</th><th class="num">Served</th><th class="num">Mentorship</th><th class="num">Avg score</th>
+        </tr></thead><tbody></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- PLAYERS -->
+    <section id="v-players" hidden>
+      <div class="head">
+        <div><h1>Players</h1><p>Everyone who finished the quiz and shared a WhatsApp number. Click a row for their answers.</p></div>
+        <div class="filters">
+          <div class="seg" data-range></div>
+          <select class="sel" id="fPlace" aria-label="Filter by place"></select>
+          <input class="inp" id="fSearch" type="search" placeholder="Search name or phone" aria-label="Search players">
+          <button class="btn" id="exportBtn" type="button">Export CSV</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><h2 id="playerCount">Players</h2><span>Phone numbers are masked. Admins can reveal one from the detail view.</span></div>
+        <div class="tw"><table id="playerTable"><thead><tr>
+          <th>When</th><th>Name</th><th>WhatsApp</th><th>Place</th><th>Trader style</th><th class="num">Score</th><th>Result</th><th>Free drink</th><th>Mentorship</th>
+        </tr></thead><tbody></tbody></table></div>
+        <button class="loadmore" id="loadMoreBtn" type="button" hidden>Load more</button>
+      </div>
+    </section>
+
+    <!-- PLACES -->
+    <section id="v-places" hidden>
+      <div class="head">
+        <div><h1>Places &amp; QR codes</h1><p>Add a cafe, college or office. Its QR code is created instantly, and its name appears on the free drink offer and token.</p></div>
+        <div class="filters"><button class="btn primary" id="addToggle" type="button">+ Add new place</button></div>
+      </div>
+
+      <div class="card" id="addCard" hidden>
+        <div class="ch"><h2>Add new place</h2><span>The QR code is generated once saved.</span></div>
+        <div class="formgrid">
+          <form class="form" id="placeForm" novalidate>
+            <label for="pName">Place name<input id="pName" type="text" placeholder="e.g. Cafe Mocha" autocomplete="off"></label>
+            <div class="two">
+              <label for="pArea">Area<input id="pArea" type="text" placeholder="e.g. Vijay Nagar" autocomplete="off"></label>
+              <label for="pType">Type<select id="pType"><option>Premium cafe</option><option>Busy cafe</option><option>College</option><option>Office</option><option>Event</option><option>Other</option></select></label>
+            </div>
+            <label class="switch" for="pOffer"><input id="pOffer" type="checkbox" checked> Free drink offer at this place</label>
+            <div class="checks" id="drinkChecks"><label for="dChai"><input id="dChai" type="checkbox" checked> Chai</label><label for="dCoffee"><input id="dCoffee" type="checkbox" checked> Coffee</label></div>
+            <div class="two">
+              <label for="pCap">Free drinks per day<input id="pCap" type="number" min="1" max="500" value="15"></label>
+              <label for="pCode">Token code <small>(optional, 3 letters, auto if blank)</small><input id="pCode" type="text" maxlength="3" autocomplete="off"></label>
+            </div>
+            <div class="err" id="pErr" role="alert"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" type="submit">Save place</button><button class="btn" type="button" id="cancelAdd">Cancel</button></div>
+          </form>
+          <div class="preview">
+            <div class="pname" id="prevName">Place name</div>
+            <dl class="kv"><dt>QR link</dt><dd id="prevLink">(shown after saving)</dd></dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="pgrid" id="placeGrid"></div>
+    </section>
+
+    <!-- COUNTER -->
+    <section id="v-counter" hidden>
+      <div class="head"><div><h1>Token check</h1><p>Same check cafe staff use at the counter — pick the place, enter its PIN, then check a token.</p></div></div>
+      <div class="counter">
+        <div class="two">
+          <select class="sel" id="ctPlace" aria-label="Place"></select>
+          <input class="inp" id="ctPin" type="text" inputmode="numeric" maxlength="10" placeholder="Counter PIN" aria-label="Counter PIN">
+        </div>
+        <form class="big" id="tokForm" novalidate><input id="tokIn" type="text" maxlength="12" placeholder="CDC-4821" aria-label="Token number" autocomplete="off"><button class="btn primary" type="submit">Check</button></form>
+        <div id="tokResult"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Player detail"></aside>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function toast(msg){var t=$('toast');t.textContent=msg;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},2800)}
+  var TYPES={scalp:'Scalper',ob:'Option buyer',os:'Option seller',swing:'Swing trader',lt:'Long-term investor',mix:'Sab kuch thoda'};
+  var RESULT_PILL={'Market Monk':'good','Disciplined Sniper':'good','Emotional Trader':'warn','Impulsive Trader':'bad'};
+
+  /* ---------- auth ---------- */
+  var TOKEN=localStorage.getItem('quizAdminToken')||'';
+  var WHOAMI=localStorage.getItem('quizAdminName')||'';
+  function showLogin(){$('loginWrap').hidden=false;$('appShell').hidden=true}
+  function showApp(){$('loginWrap').hidden=true;$('appShell').hidden=false;$('whoami').textContent=WHOAMI;renderAll()}
+  if(TOKEN){showApp()}else{showLogin()}
+
+  $('loginForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var email=$('lEmail').value.trim(),pass=$('lPass').value;
+    $('lErr').textContent='';
+    fetch('/admin/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({inputdata:{email:email,password:pass}})})
+      .then(function(r){return r.json()})
+      .then(function(j){
+        if(j.status!=='success'){$('lErr').textContent=j.msg||'Login failed';return}
+        TOKEN=j.data.token;WHOAMI=j.data.name||j.data.email||'';
+        localStorage.setItem('quizAdminToken',TOKEN);localStorage.setItem('quizAdminName',WHOAMI);
+        showApp();
+      })
+      .catch(function(){$('lErr').textContent='Could not reach the server.'});
+  });
+  $('logoutBtn').addEventListener('click',function(){
+    localStorage.removeItem('quizAdminToken');localStorage.removeItem('quizAdminName');TOKEN='';showLogin();
+  });
+
+  function api(path,opts){
+    opts=opts||{};
+    var headers=Object.assign({'Authorization':'Bearer '+TOKEN},opts.headers||{});
+    if(opts.body&&!headers['Content-Type'])headers['Content-Type']='application/json';
+    return fetch(path,{method:opts.method||'GET',headers:headers,body:opts.body?JSON.stringify(opts.body):undefined})
+      .then(function(r){
+        if(r.status===401){localStorage.removeItem('quizAdminToken');TOKEN='';showLogin();throw new Error('Session expired')}
+        return r.json();
+      });
+  }
+  function apiBlob(path){
+    return fetch(path,{headers:{'Authorization':'Bearer '+TOKEN}}).then(function(r){
+      if(r.status===401){localStorage.removeItem('quizAdminToken');TOKEN='';showLogin();throw new Error('Session expired')}
+      if(!r.ok)throw new Error('Request failed');
+      return r.blob();
+    });
+  }
+
+  /* ---------- state ---------- */
+  var RANGES=[['today','Today'],['7d','7 days'],['30d','30 days'],['all','All time']], range='7d', placeFilter='all', search='';
+  var DAY=86400000;
+  function sinceISO(){
+    if(range==='all')return '';
+    if(range==='today'){var d=new Date();d.setHours(0,0,0,0);return d.toISOString()}
+    var days=range==='7d'?7:30;
+    return new Date(Date.now()-days*DAY).toISOString();
+  }
+  function mask(ph){if(!ph||ph.length<10)return ph;return '+91 '+ph.slice(0,2)+'xxx x'+ph.slice(-4)}
+  function fmtWhen(iso){
+    var t=new Date(iso).getTime(),d=new Date(t),today=new Date();today.setHours(0,0,0,0);
+    var hm=d.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'});
+    if(t>=today.getTime())return 'Today, '+hm; if(t>=today.getTime()-DAY)return 'Yesterday, '+hm;
+    return d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})+', '+hm;
+  }
+
+  document.querySelectorAll('[data-range]').forEach(function(seg){
+    RANGES.forEach(function(r){var b=document.createElement('button');b.type='button';b.textContent=r[1];b.dataset.r=r[0];
+      b.addEventListener('click',function(){range=r[0];playersPage=1;playersAcc=[];renderAll()});seg.appendChild(b)});
+  });
+  function syncRange(){document.querySelectorAll('[data-range] button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.r===range))})}
+
+  var views=['dash','players','places','counter'];
+  function go(v){views.forEach(function(x){$('v-'+x).hidden=x!==v});document.querySelectorAll('.nav').forEach(function(n){n.setAttribute('aria-current',n.dataset.view===v?'page':'false')});window.scrollTo(0,0)}
+  document.querySelectorAll('.nav').forEach(function(n){n.addEventListener('click',function(){go(n.dataset.view)})});
+
+  /* ---------- dashboard ---------- */
+  var PLACES=[];
+  function renderDash(){
+    api('/admin/quiz/dashboard?range='+encodeURIComponent(range)).then(function(j){
+      if(j.status!=='success')return;
+      var t=j.data.tiles;
+      var tiles=[['QR scans',t.scans,'People who opened the quiz'],['Completed quizzes',t.completed,'Shared a WhatsApp number'],['Completion rate',t.completionRate+'%','Completed ÷ scans'],
+        ['Free drinks given',t.drinksGiven,'Tokens issued'],['Drinks served',t.served,'Marked at the counter'],['Mentorship requests',t.mentorship,'Booked a free 1:1 session']];
+      $('tiles').innerHTML=tiles.map(function(x){return '<div class="tile"><div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="s">'+x[2]+'</div></div>'}).join('');
+      var rows=j.data.places||[];
+      var max=Math.max(1,Math.max.apply(null,rows.map(function(r){return r.completed})));
+      $('placeTable').querySelector('tbody').innerHTML=rows.map(function(r){
+        var w=r.completed/max*100;
+        return '<tr class="click" data-src="'+esc(r.src)+'"><td class="pl"><b>'+esc(r.name)+'</b><small>'+esc(r.area||'')+' · '+esc(r.type)+'</small></td>'+
+          '<td class="num">'+r.scans+'</td><td class="num"><b>'+r.completed+'</b></td>'+
+          '<td class="barcell"><div class="barwrap"><div class="track"><i style="width:'+w.toFixed(1)+'%"></i></div><span style="min-width:38px;text-align:right">'+r.completionRate+'%</span></div></td>'+
+          '<td class="num">'+r.drinksGiven+'</td><td class="num">'+r.served+'</td><td class="num">'+r.mentorship+'</td><td class="num">'+(r.completed?r.avgScore:'')+'</td></tr>';
+      }).join('');
+    }).catch(function(){});
+  }
+  $('placeTable').addEventListener('click',function(e){var tr=e.target.closest('tr[data-src]');if(!tr)return;placeFilter=tr.dataset.src;$('fPlace').value=placeFilter;playersPage=1;playersAcc=[];renderPlayers();go('players')});
+
+  /* ---------- players ---------- */
+  var playersPage=1, playersAcc=[], playersTotal=0;
+  function fillPlaceSelect(){
+    ['fPlace','ctPlace'].forEach(function(id){
+      var sel=$(id),cur=sel.value;
+      sel.innerHTML=(id==='fPlace'?'<option value="all">All places</option>':'<option value="">Select place…</option>')+
+        PLACES.filter(function(p){return id==='fPlace'||p.offer}).map(function(p){return '<option value="'+esc(p.src)+'">'+esc(p.name+(p.area?', '+p.area:''))+'</option>'}).join('');
+      if(cur)sel.value=cur;
+    });
+  }
+  function renderPlayers(append){
+    var qs='page='+playersPage+'&pageSize=50';
+    if(placeFilter!=='all')qs+='&src='+encodeURIComponent(placeFilter);
+    if(search.trim())qs+='&search='+encodeURIComponent(search.trim());
+    var from=sinceISO();if(from)qs+='&from='+encodeURIComponent(from);
+    api('/admin/quiz/players?'+qs).then(function(j){
+      if(j.status!=='success')return;
+      playersTotal=j.data.total;
+      playersAcc=append?playersAcc.concat(j.data.players):j.data.players;
+      $('playerCount').textContent=playersTotal+' player'+(playersTotal===1?'':'s');
+      var tb=$('playerTable').querySelector('tbody');
+      if(!playersAcc.length){tb.innerHTML='<tr><td colspan="9" class="empty">No players match these filters yet.</td></tr>';$('loadMoreBtn').hidden=true;return}
+      tb.innerHTML=playersAcc.map(function(p){
+        var drink=p.freeDrinkStatus==='served'?'<span class="pill good">Served</span>':p.freeDrinkStatus==='not served yet'?'<span class="pill warn">Not served yet</span>':'<span class="pill mute">'+(p.freeDrinkStatus==='no offer'?'No offer':'Not claimed')+'</span>';
+        return '<tr class="click" data-id="'+esc(p.sessionId)+'"><td>'+fmtWhen(p.when)+'</td><td><b>'+esc(p.name||'—')+'</b></td><td class="mono">'+esc(p.whatsappMasked)+'</td><td>'+esc(p.place)+'</td><td>'+(TYPES[p.traderType]||esc(p.traderType||''))+'</td>'+
+          '<td class="num"><span class="score">'+p.score+'<small>/'+p.scoreOutOf+'</small></span></td><td><span class="pill '+(RESULT_PILL[p.resultType]||'mute')+'">'+esc(p.resultType)+'</span></td><td>'+drink+'</td><td>'+(p.mentorship?'<span class="pill good">Requested</span>':'')+'</td></tr>';
+      }).join('');
+      $('loadMoreBtn').hidden=playersAcc.length>=playersTotal;
+    }).catch(function(){});
+  }
+  $('loadMoreBtn').addEventListener('click',function(){playersPage++;renderPlayers(true)});
+  $('fPlace').addEventListener('change',function(){placeFilter=this.value;playersPage=1;playersAcc=[];renderPlayers()});
+  $('fSearch').addEventListener('input',function(){search=this.value;playersPage=1;playersAcc=[];renderPlayers()});
+  $('exportBtn').addEventListener('click',function(){
+    var qs='';if(placeFilter!=='all')qs+='&src='+encodeURIComponent(placeFilter);if(search.trim())qs+='&search='+encodeURIComponent(search.trim());
+    var from=sinceISO();if(from)qs+='&from='+encodeURIComponent(from);
+    apiBlob('/admin/quiz/players/export?'+qs.replace(/^&/,'')).then(function(blob){
+      var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='quiz-players.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+    }).catch(function(){toast('Could not export CSV.')});
+  });
+  $('playerTable').addEventListener('click',function(e){var tr=e.target.closest('tr[data-id]');if(tr)openPlayer(tr.dataset.id)});
+
+  function openPlayer(sessionId){
+    api('/admin/quiz/players/'+encodeURIComponent(sessionId)).then(function(j){
+      if(j.status!=='success'){toast(j.msg||'Could not load player');return}
+      var p=j.data;
+      var h='<button class="btn close" type="button" id="dClose">Close</button><h2>Player</h2>'+
+        '<div style="margin-top:4px"><span class="pill '+(RESULT_PILL[p.resultType]||'mute')+'">'+esc(p.resultType)+'</span> <span style="color:var(--muted);font-size:13px">'+fmtWhen(p.when)+'</span></div>'+
+        '<div class="dgrid"><div>WhatsApp<b class="mono" id="dPhone">'+esc(p.phoneMasked)+'</b><button class="btn" type="button" id="reveal" style="margin-top:6px;padding:4px 9px;font-size:12px">Reveal number</button></div>'+
+        '<div>Trader style<b>'+(TYPES[p.traderType]||esc(p.traderType||''))+'</b></div><div>Score<b>'+p.score+' / 7</b></div>'+
+        '<div>Free drink<b>'+(p.token?esc(p.token.drink)+' · <span class="mono">'+esc(p.token.token)+'</span>'+(p.token.servedAt?' · served':' · not served'):'None')+'</b></div>'+
+        '<div>Mentorship<b>'+(p.mentorshipStatus?esc(p.mentorshipStatus):'Not requested')+'</b></div></div>'+
+        '<h3 style="margin:18px 0 4px;font-size:15px">Answers</h3>';
+      (p.answers||[]).forEach(function(a,i){var ok=a.picked===a.correctIndex;
+        h+='<div class="ans"><div class="q">'+(i+1)+'. '+esc(a.question)+'</div><div class="r">'+(ok?'<span class="pill good">Correct</span>':a.picked<0?'<span class="pill bad">Time ran out</span>':'<span class="pill bad">Wrong</span>')+
+          (a.picked>=0&&!ok?' Picked: <b>'+esc(a.pickedText)+'</b><br>':' ')+'Right answer: <b>'+esc(a.correctText)+'</b></div></div>'});
+      $('drawer').innerHTML=h;$('drawer').hidden=false;$('scrim').hidden=false;$('dClose').focus();
+      $('dClose').addEventListener('click',closeDrawer);
+      $('reveal').addEventListener('click',function(){
+        var btn=this;btn.disabled=true;
+        api('/admin/quiz/players/'+encodeURIComponent(sessionId)+'/reveal',{method:'POST'}).then(function(r){
+          if(r.status==='success'){$('dPhone').textContent='+91 '+r.data.phone;btn.remove()}else{toast(r.msg||'Could not reveal');btn.disabled=false}
+        }).catch(function(){btn.disabled=false});
+      });
+    }).catch(function(){});
+  }
+  function closeDrawer(){$('drawer').hidden=true;$('scrim').hidden=true}
+  $('scrim').addEventListener('click',closeDrawer);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!$('drawer').hidden)closeDrawer()});
+
+  /* ---------- places ---------- */
+  function renderPlaces(){
+    api('/admin/quiz/places').then(function(j){
+      if(j.status!=='success')return;
+      PLACES=j.data||[];fillPlaceSelect();
+      var g=$('placeGrid');g.innerHTML='';
+      PLACES.forEach(function(p){
+        var c=document.createElement('div');c.className='place';
+        c.innerHTML='<div class="qrb"><img alt="QR code" hidden></div><div><h3>'+esc(p.name)+(p.active?'':' <span class="pill mute">Inactive</span>')+'</h3><div class="meta">'+esc(p.area||'')+' · '+esc(p.type)+'</div>'+
+          '<div class="link">'+esc(p.link)+'</div><div class="row">'+
+          (p.offer?'<span class="pill good">Free '+esc((p.drinks||[]).join(' / ').toLowerCase())+'</span><span class="pill mute">Token '+esc(p.code||'')+'</span><span class="pill mute">PIN '+esc(p.counterPin||'')+'</span>':'<span class="pill mute">Quiz + mentorship only</span>')+'</div></div>'+
+          '<div class="stats"><div><b>'+p.scans+'</b>Scans</div><div><b>'+p.completed+'</b>Completed</div><div><b>'+(p.offer?p.served:'–')+'</b>Served</div></div>'+
+          '<div class="acts"><button class="btn" type="button" data-dl>Download QR</button><button class="btn" type="button" data-pl>View players</button>'+(p.active?'<button class="btn danger" type="button" data-deact>Deactivate</button>':'')+'</div>';
+        g.appendChild(c);
+        var img=c.querySelector('img');
+        apiBlob('/admin/quiz/places/'+encodeURIComponent(p.src)+'/qr.png').then(function(blob){img.src=URL.createObjectURL(blob);img.hidden=false}).catch(function(){});
+        c.querySelector('[data-dl]').addEventListener('click',function(){
+          apiBlob('/admin/quiz/places/'+encodeURIComponent(p.src)+'/qr.png').then(function(blob){
+            var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=p.src+'.png';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+          }).catch(function(){toast('Could not download QR.')});
+        });
+        c.querySelector('[data-pl]').addEventListener('click',function(){placeFilter=p.src;fillPlaceSelect();playersPage=1;playersAcc=[];renderPlayers();go('players')});
+        var deactBtn=c.querySelector('[data-deact]');
+        if(deactBtn)deactBtn.addEventListener('click',function(){
+          if(!confirm('Deactivate '+p.name+'? Its QR code will stop working.'))return;
+          api('/admin/quiz/places/'+encodeURIComponent(p.src)+'/deactivate',{method:'POST'}).then(function(){renderPlaces()});
+        });
+      });
+    }).catch(function(){});
+  }
+  $('addToggle').addEventListener('click',function(){$('addCard').hidden=false;$('placeForm').reset();$('pErr').textContent='';$('pName').focus();updatePreview()});
+  $('cancelAdd').addEventListener('click',function(){$('addCard').hidden=true});
+  function updatePreview(){$('prevName').textContent=$('pName').value.trim()||'Place name'}
+  ['pName','pArea','pOffer'].forEach(function(id){$(id).addEventListener('input',updatePreview)});
+  $('pOffer').addEventListener('change',function(){$('drinkChecks').hidden=!this.checked});
+  $('placeForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var name=$('pName').value.trim(),offer=$('pOffer').checked;
+    var drinks=[];if($('dChai').checked)drinks.push('Chai');if($('dCoffee').checked)drinks.push('Coffee');
+    var err='';
+    if(!name)err='Please enter the place name.';
+    else if(offer&&!drinks.length)err='Pick at least one drink, or turn off the free drink offer.';
+    $('pErr').textContent=err;if(err)return;
+    api('/admin/quiz/places',{method:'POST',body:{name:name,area:$('pArea').value.trim(),type:$('pType').value,offer:offer,drinks:drinks,dailyCap:+$('pCap').value||15,code:$('pCode').value.trim()||undefined}})
+      .then(function(r){
+        if(r.status!=='success'){$('pErr').textContent=r.msg||'Could not save place';return}
+        $('addCard').hidden=true;renderPlaces();
+        toast(name+' added. Its QR code is ready to download.');
+      });
+  });
+
+  /* ---------- counter / token check ---------- */
+  function renderTok(){
+    var src=$('ctPlace').value,pin=$('ctPin').value.trim(),v=$('tokIn').value.trim().toUpperCase().replace(/\s/g,'');
+    var box=$('tokResult');
+    if(!src||!pin){box.innerHTML='<p class="err">Select a place and enter its PIN first.</p>';return}
+    if(!v)return;
+    fetch('/api/quiz/counter/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({src:src,pin:pin,token:v})})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
+      .then(function(res){
+        if(!res.ok){box.innerHTML='<p class="err">'+esc(res.j.message||'Invalid PIN')+'</p>';return}
+        var j=res.j;
+        if(j.result==='not_found'){box.innerHTML='<div class="result"><span class="pill bad">Not found</span><h3 style="margin-top:8px">No token '+esc(v)+'</h3><p style="color:var(--muted);margin:0">Check the code on the customer\'s WhatsApp message.</p></div>';return}
+        if(j.result==='already_served'){box.innerHTML='<div class="result"><span class="pill warn">Already served</span><h3 style="margin-top:8px">Token '+esc(v)+'</h3><p style="color:var(--muted);margin:0">Served already.</p></div>';return}
+        box.innerHTML='<div class="result"><span class="pill good">Valid</span><h3 style="margin-top:8px">Free '+esc((j.drink||'').toLowerCase())+' for '+esc(j.name||'')+'</h3><p style="color:var(--muted);margin:0 0 12px">issued '+fmtWhen(j.issuedAt)+'</p><button class="btn primary" type="button" id="markServed">Mark served</button></div>';
+        $('markServed').addEventListener('click',function(){
+          fetch('/api/quiz/counter/mark-served',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({src:src,pin:pin,token:v})})
+            .then(function(r){return r.json()}).then(function(){renderTok();toast('Marked served.')});
+        });
+      }).catch(function(){box.innerHTML='<p class="err">Something went wrong.</p>'});
+  }
+  $('tokForm').addEventListener('submit',function(e){e.preventDefault();renderTok()});
+
+  function renderAll(){syncRange();renderDash();renderPlayers();renderPlaces()}
+})();
+</script>

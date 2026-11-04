@@ -117,31 +117,54 @@ exports.generateOtp = async (length) => {
 }
 
 exports.sendNotification = async (tokens, route, id, notificationContent) => {
+	const title = notificationContent.title || '';
+	const body  = notificationContent.body || '';
+	const image = notificationContent.imageUrl || notificationContent.image || '';
+
+	// Always send notification+data so Android shows it reliably even when app is killed.
+	// Image URL must be HTTPS — FCM natively renders it as big picture on Android 8+.
 	const message = {
 		data: {
-			"routs": route || "",
-			"id": id.toString() || ""
+			title,
+			body,
+			image: image || '',
+			routs: route || '',
+			id: id.toString() || '',
 		},
-		notification: notificationContent,
-		tokens: tokens
-	}
-	console.log('message', message);
+		notification: {
+			title,
+			body,
+			...(image ? { imageUrl: image } : {}),
+		},
+		android: {
+			priority: 'high',
+			notification: {
+				channelId: 'high_importance_channel',
+				...(image ? { imageUrl: image } : {}),
+			},
+		},
+		apns: {
+			payload: { aps: { 'mutable-content': 1 } },
+			fcmOptions: {
+				...(image ? { imageUrl: image } : {}),
+			},
+		},
+		tokens,
+	};
+
+	console.log('[FCM] Sending to', tokens.length, 'token(s), image:', image || 'none');
 	admin.messaging().sendEachForMulticast(message)
 		.then((response) => {
-			console.log('Successfully sent message: ', response.responses[0]);
+			console.log('[FCM] Success:', response.successCount, 'Failed:', response.failureCount);
 			if (response.failureCount > 0) {
-				const failedTokens = [];
 				response.responses.forEach((resp, idx) => {
-					if (!resp.success) {
-						failedTokens.push(tokens[idx]);
-					}
+					if (!resp.success) console.log('[FCM] Failed token:', tokens[idx]?.substring(0, 20), resp.error?.code);
 				});
-				console.log("List of tokens that failed: ", failedTokens);
 			}
 		})
 		.catch((error) => {
-			console.log('Error Sending Message: ', error);
-		})
+			console.log('[FCM] Error:', error.message);
+		});
 }
 
 // Add data into the authentication log table
@@ -1402,20 +1425,20 @@ exports.successApiResponse = async function (req, res, response) {
 };
 
 exports.apiResponse = async function (req, res, response) {
-	response = await utility.nestedObjToStr(req, response);
+    response = await utility.nestedObjToStr(req, response);
 
-	const params = {
-		api_log_Endpoint: req.originalUrl,
-		api_log_Method: req.method,
-		api_log_Request: JSON.stringify(req?.body),
-		api_log_Response: JSON.stringify(response),
-		api_log_StatusCode: 200,
-		created_at: new Date()
-	}
+    const params = {
+        api_log_Endpoint: req && req.originalUrl ? req.originalUrl : 'N/A',
+        api_log_Method: req && req.method ? req.method : 'N/A',
+        api_log_Request: req && req.body ? JSON.stringify(req.body) : 'N/A',
+        api_log_Response: JSON.stringify(response),
+        api_log_StatusCode: 200,
+        created_at: new Date()
+    }
 
-	await dbquery.insertSingle(constants.vals.defaultDB, 'api_log', params);
+    await dbquery.insertSingle(constants.vals.defaultDB, 'api_log', params);
 
-	return res.status(200).json(response);
+    return res.status(200).json(response);
 };
 
 exports.nestedObjToStr = async function (req, objData) {

@@ -1,0 +1,119 @@
+{
+  "info": {
+    "_postman_id": "investapas-contact-api-v1",
+    "name": "Investapas – Contact API",
+    "description": "Website Contact Form APIs\n\nBase URL variable: {{base_url}} — e.g. http://localhost:3000\n\nAll APIs are public — no token required.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Submit Contact Form",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"first_name\": \"Savan\",\n  \"last_name\": \"Ponda\",\n  \"email\": \"savan@example.com\",\n  \"phone_number\": \"9876543210\",\n  \"whatsapp_number\": \"9876543210\",\n  \"same_as_phone\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/contact/submit",
+          "host": ["{{base_url}}"],
+          "path": ["contact", "submit"]
+        },
+        "description": "Submit website contact form — no authentication required.\n\nFields:\n- first_name (required)\n- last_name (required)\n- email (required)\n- phone_number (required)\n- whatsapp_number (optional if same_as_phone = true)\n- same_as_phone (boolean)"
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/contact/submit" }
+          },
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"status\": 1,\n  \"message\": \"Thank you! We will get back to you soon.\",\n  \"data\": {\n    \"id\": 1\n  }\n}"
+        },
+        {
+          "name": "Validation Error",
+          "originalRequest": {
+            "method": "POST",
+            "url": { "raw": "{{base_url}}/contact/submit" }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "body": "{\n  \"status\": 0,\n  \"message\": \"first_name, last_name, email and phone_number are required.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "2. Get All Contacts",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/contact/list?page=1&limit=20&search=",
+          "host": ["{{base_url}}"],
+          "path": ["contact", "list"],
+          "query": [
+            { "key": "page",   "value": "1",   "description": "Page number (default 1)" },
+            { "key": "limit",  "value": "20",  "description": "Items per page (default 20)" },
+            { "key": "search", "value": "",    "description": "Search by name / email / phone" }
+          ]
+        },
+        "description": "Get paginated list of all contact form submissions — no authentication required."
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"status\": 1,\n  \"message\": \"Contact list fetched.\",\n  \"data\": {\n    \"total\": 42,\n    \"page\": 1,\n    \"limit\": 20,\n    \"data\": [\n      {\n        \"id\": 1,\n        \"first_name\": \"Savan\",\n        \"last_name\": \"Ponda\",\n        \"email\": \"savan@example.com\",\n        \"phone_number\": \"9876543210\",\n        \"whatsapp_number\": \"9876543210\",\n        \"same_as_phone\": 1,\n        \"created_at\": \"2026-06-08T10:00:00.000Z\"\n      }\n    ]\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "3. Get Contact by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/contact/1",
+          "host": ["{{base_url}}"],
+          "path": ["contact", "1"]
+        },
+        "description": "Get single contact submission by ID — no authentication required."
+      },
+      "response": [
+        {
+          "name": "Success",
+          "status": "OK",
+          "code": 200,
+          "body": "{\n  \"status\": 1,\n  \"message\": \"Contact fetched.\",\n  \"data\": {\n    \"id\": 1,\n    \"first_name\": \"Savan\",\n    \"last_name\": \"Ponda\",\n    \"email\": \"savan@example.com\",\n    \"phone_number\": \"9876543210\",\n    \"whatsapp_number\": \"9876543210\",\n    \"same_as_phone\": 1,\n    \"created_at\": \"2026-06-08T10:00:00.000Z\"\n  }\n}"
+        },
+        {
+          "name": "Not Found",
+          "status": "Not Found",
+          "code": 404,
+          "body": "{\n  \"status\": 0,\n  \"message\": \"Contact not found.\"\n}"
+        }
+      ]
+    }
+  ]
+}

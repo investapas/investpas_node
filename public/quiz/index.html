@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="hi-Latn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Investapas Discipline Quiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Hind:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+/* Layout: one phone-width column on the standee blue; each step of the game is one screen. Single deliberate look in both themes. */
+:root{
+  --blue:#1E3DFF; --deep:#0D1B8C; --yellow:#FFD60A; --red:#FF4B3E; --green:#2BD67B;
+  --ink:#111111; --white:#FFFFFF; --soft:#DCE3FF; --wa:#E7FFDB; --wabg:#EFE7DE; --muted:#5A6178;
+  --display:'Anton','Impact','Arial Narrow',sans-serif;
+  --body:'Hind',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  color-scheme:dark;
+}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--blue);color:var(--white);font-family:var(--body);font-size:17px;line-height:1.45;-webkit-font-smoothing:antialiased;margin:0}
+.app{max-width:460px;min-height:100%;margin:0 auto;display:flex;flex-direction:column;box-sizing:border-box;padding-block:20px 28px;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:3px}
+.top span:last-child{color:var(--yellow);letter-spacing:2px;text-align:right}
+.screen{flex:1;display:flex;flex-direction:column;padding-top:26px}
+.d{font-family:var(--display);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.3px;margin:0;text-wrap:balance}
+.y{color:var(--yellow)}
+.btn{appearance:none;border:0;cursor:pointer;font-family:var(--display);font-size:24px;letter-spacing:.6px;text-transform:uppercase;background:var(--yellow);color:var(--ink);border-radius:14px;padding:16px 20px 13px;width:100%;box-shadow:0 5px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn.ghost{background:transparent;color:var(--white);box-shadow:none;border:2px solid rgba(255,255,255,.45);font-size:19px;padding:12px 16px 9px}
+.btn:focus-visible,.opt:focus-visible,.type:focus-visible,.pickdrink:focus-visible,input:focus-visible,.link:focus-visible{outline:3px solid var(--white);outline-offset:3px}
+.link{appearance:none;background:none;border:0;color:var(--soft);font:600 15px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px}
+.fine{font-size:13.5px;color:var(--soft);text-align:center}
+.sub{font-size:18px;margin:16px 0 0;color:var(--soft);max-width:36ch}
+
+/* start */
+.hero h1{font-size:clamp(54px,15vw,76px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 0}
+.chip{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:1px;border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 12px}
+.candles{width:100%;height:auto;margin:26px 0}
+.foot{margin-top:auto;display:grid;gap:12px}
+
+/* type picker */
+.types{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.type{appearance:none;cursor:pointer;text-align:left;background:var(--deep);color:var(--white);border:2px solid transparent;border-radius:14px;padding:14px 14px 12px;font:700 17px/1.2 var(--body);display:grid;gap:4px;min-height:86px}
+.type small{font-weight:500;font-size:13px;color:var(--soft)}
+.type.on{border-color:var(--yellow);background:#14257A}
+.type.on::after{content:'✓';position:absolute}
+
+/* question */
+.prog{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:1.5px}
+.phase{color:var(--yellow)}
+.dots{display:flex;gap:6px;margin-top:10px}
+.dots i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.25)}
+.dots i.on{background:var(--yellow)}
+.timerrow{display:flex;align-items:center;gap:12px;margin-top:16px}
+.timer{flex:1;height:12px;border-radius:6px;background:rgba(0,0,0,.25);overflow:hidden}
+.timer b{display:block;height:100%;width:100%;background:var(--white);border-radius:6px;transform-origin:left center}
+.timer.ans b{background:var(--yellow)}
+.timer.hot b{background:var(--red)}
+.secs{font-family:var(--display);font-size:30px;line-height:1;min-width:34px;text-align:right}
+.secs.hot{color:var(--red)}
+.scene{margin-top:18px;background:var(--deep);border-radius:18px;padding:18px 18px 20px}
+.scene .tag{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:2px;color:var(--yellow)}
+.scene .cat{float:right;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:1px;color:var(--soft);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:2px 8px}
+.scene h2{font-family:var(--body);font-weight:700;font-size:23px;line-height:1.28;margin:10px 0 0;text-wrap:pretty;clear:both}
+.reading{margin-top:18px;border:2px dashed rgba(255,255,255,.35);border-radius:14px;padding:16px;text-align:center;display:grid;gap:12px}
+.reading p{margin:0;color:var(--soft);font-weight:600}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{appearance:none;text-align:left;cursor:pointer;background:var(--white);color:var(--ink);border:0;border-radius:14px;padding:14px 16px;font:600 17px/1.3 var(--body);display:flex;gap:12px;align-items:center;box-shadow:0 4px 0 rgba(0,0,0,.35);transition:transform .08s;animation:in .25s ease-out both}
+.opt:nth-child(2){animation-delay:.05s}.opt:nth-child(3){animation-delay:.1s}.opt:nth-child(4){animation-delay:.15s}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.opt b{font-family:var(--display);font-weight:400;font-size:20px;color:var(--blue);min-width:18px}
+.opt:active{transform:translateY(3px)}
+.opt.pick{background:var(--yellow)}
+.toast{margin-top:14px;text-align:center;font-family:var(--display);font-size:26px;letter-spacing:.5px;min-height:30px}
+.toast.bad{color:var(--red)}
+
+/* forms */
+.formcard{background:var(--white);color:var(--ink);border-radius:20px;padding:22px 18px;margin-top:22px;display:grid;gap:14px}
+.formcard label{font-weight:600;font-size:15px;display:grid;gap:6px}
+.formcard label small{font-weight:500;color:var(--muted)}
+.formcard input[type=text],.formcard input[type=tel],.formcard input[type=email]{font:500 17px var(--body);padding:12px 14px;border:2px solid #D6DBEA;border-radius:12px;color:var(--ink);background:#fff;width:100%;box-sizing:border-box}
+.formcard input:focus{border-color:var(--blue);outline:none}
+.tel{display:flex;align-items:stretch;border:2px solid #D6DBEA;border-radius:12px;overflow:hidden}
+.tel span{display:flex;align-items:center;padding:0 12px;background:#F1F3FA;font-weight:600;color:#3B4258}
+.tel input{border:0!important;border-radius:0!important}
+.tel:focus-within{border-color:var(--blue)}
+.consent{display:flex!important;gap:10px!important;align-items:flex-start;font-weight:500!important;font-size:14.5px!important;line-height:1.35}
+.consent input{width:20px;height:20px;margin-top:1px;flex:none;accent-color:var(--blue)}
+.err{color:#D21F12;font-size:13.5px;font-weight:600;min-height:18px;margin-top:-6px}
+.btn.onwhite{box-shadow:0 5px 0 var(--deep)}
+.lock{display:flex;align-items:center;gap:14px;margin-top:14px}
+.lock svg{width:46px;flex:none}
+.lock p{margin:0;color:var(--soft);font-size:16px}
+.kv{display:flex;justify-content:space-between;background:#F1F3FA;border-radius:10px;padding:10px 12px;font-weight:600;font-size:15px}
+
+/* result */
+.rescard{margin-top:16px;background:var(--yellow);color:var(--ink);border-radius:22px;padding:20px 20px 18px;box-shadow:0 8px 0 var(--ink)}
+.rescard .brand{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:2px}
+.gauge{display:flex;align-items:flex-end;gap:10px;margin-top:8px}
+.gauge .num{font-family:var(--display);font-size:100px;line-height:.85}
+.gauge .of{font-family:var(--display);font-size:28px;padding-bottom:8px}
+.gauge .lbl{margin-left:auto;text-align:right;font-weight:700;font-size:15px;line-height:1.2;padding-bottom:8px}
+.bar{height:10px;border-radius:5px;background:rgba(0,0,0,.15);margin-top:12px;overflow:hidden}
+.bar b{display:block;height:100%;background:var(--ink);border-radius:5px;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.ttype{margin-top:16px;display:inline-block;background:var(--ink);color:var(--yellow);font-family:var(--display);font-size:30px;line-height:1;padding:9px 14px 6px;border-radius:8px;transform:rotate(-2deg)}
+.typeline{margin:12px 0 0;font-weight:600;font-size:18px;line-height:1.3}
+.handle{margin-top:12px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:1.5px;opacity:.7}
+.sent{margin-top:18px;display:flex;gap:10px;align-items:center;background:var(--deep);border-radius:14px;padding:12px 14px;font-weight:600;font-size:15.5px}
+.sent i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--green);color:var(--ink);display:grid;place-items:center;flex:none;font-weight:700}
+
+.offer{margin-top:22px;background:var(--white);color:var(--ink);border-radius:22px;padding:20px 18px;display:grid;gap:12px;position:relative;overflow:hidden}
+.offer .ribbon{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:2px;color:#C21D10}
+.offer h3{font-family:var(--display);font-weight:400;font-size:34px;line-height:1;margin:0;color:var(--blue);text-transform:uppercase}
+.offer p{margin:0;color:#3B4258;font-size:16px}
+.drinks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pickdrink{appearance:none;cursor:pointer;border:2px solid #D6DBEA;background:#fff;border-radius:14px;padding:12px;display:grid;justify-items:center;gap:4px;font:700 16px var(--body);color:var(--ink)}
+.pickdrink span{font-size:30px;line-height:1}
+.pickdrink.on{border-color:var(--blue);background:#EEF1FF}
+
+.wa{margin-top:18px;background:var(--wabg);border-radius:18px;padding:14px;color:var(--ink)}
+.wa .head{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px}
+.wa .head i{width:30px;height:30px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-style:normal;color:#fff;font-family:var(--display);font-size:16px}
+.wa .head small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.bubble{margin-top:10px;background:var(--wa);border-radius:4px 14px 14px 14px;padding:10px 12px 6px;font-size:14.5px;line-height:1.42;white-space:pre-line;box-shadow:0 1px 1px rgba(0,0,0,.12);max-width:94%;overflow-wrap:anywhere}
+.bubble.long{max-height:330px;overflow-y:auto}
+.bubble time{display:block;text-align:right;font-size:11px;color:#667;margin-top:2px}
+.wa .note{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
+
+/* token */
+.ticket{margin-top:18px;background:var(--white);color:var(--ink);border-radius:22px;overflow:hidden;box-shadow:0 8px 0 var(--ink)}
+.ticket .tophalf{background:var(--yellow);padding:18px 20px 16px}
+.ticket .tophalf .brand{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:2px}
+.ticket .what{font-family:var(--display);font-size:40px;line-height:1;margin-top:10px;text-transform:uppercase}
+.ticket .cafe{font-weight:700;font-size:17px;margin-top:4px}
+.ticket .cut{height:0;border-top:3px dashed #C9CEDD;margin:0 14px}
+.ticket .bottom{padding:16px 20px 18px;display:grid;gap:6px;text-align:center}
+.ticket .lab{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:2px;color:var(--muted)}
+.ticket .code{white-space:nowrap;font-family:var(--display);font-size:clamp(44px,13vw,60px);line-height:1;letter-spacing:3px;color:var(--blue)}
+.ticket .meta{font-size:14px;color:#3B4258;font-weight:600}
+.live{display:inline-flex;align-items:center;gap:8px;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:700;color:#0F7A3F}
+.live b{width:9px;height:9px;border-radius:50%;background:var(--green);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.6);opacity:.4}}
+.cta{margin-top:20px;background:var(--deep);border-radius:20px;padding:18px;display:grid;gap:10px}
+.cta h3{font-family:var(--display);font-weight:400;font-size:26px;line-height:1;margin:0;text-transform:uppercase}
+.cta p{margin:0;color:var(--soft);font-size:15.5px}
+.slots{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px;color:var(--yellow)}
+.slots b{width:9px;height:9px;border-radius:50%;background:var(--yellow);animation:pulse 1.4s ease-in-out infinite}
+.again{display:flex;justify-content:center;margin-top:16px}
+@media (prefers-reduced-motion:reduce){.live b,.slots b{animation:none}.bar b{transition:none}.opt{animation:none}}
+/* production: hide the prototype-only WhatsApp previews */
+.wa{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="top"><span>INVESTAPAS</span><span id="topR">DISCIPLINE TEST</span></div>
+
+  <!-- START -->
+  <section class="screen hero" id="sStart">
+    <h1 class="d">Trading<br><span class="y">Discipline</span><br>Score</h1>
+    <p class="sub">7 tricky market situations. Har sawaal padhne ke liye 10 second aur jawaab ke liye 15 second. Dekhiye, faisle aapka dimaag leta hai ya emotions.</p>
+    <div class="chips"><span class="chip">3 MIN</span><span class="chip">FREE</span><span class="chip" id="chaiChip">☕ FREE CHAI/COFFEE</span></div>
+    <svg class="candles" viewBox="0 0 400 110" aria-hidden="true">
+      <line x1="0" y1="20" x2="400" y2="96" stroke="#fff" stroke-opacity=".3" stroke-width="2" stroke-dasharray="6 7"/>
+      <g fill="#FFD60A" stroke="#FFD60A" stroke-width="3">
+        <line x1="30" y1="6" x2="30" y2="52"/><rect x="20" y="16" width="20" height="26" fill="#fff" stroke="#fff"/>
+        <line x1="90" y1="20" x2="90" y2="70"/><rect x="80" y="28" width="20" height="32"/>
+        <line x1="150" y1="36" x2="150" y2="84"/><rect x="140" y="44" width="20" height="28"/>
+        <line x1="210" y1="30" x2="210" y2="70"/><rect x="200" y="38" width="20" height="18" fill="#fff" stroke="#fff"/>
+        <line x1="270" y1="54" x2="270" y2="100"/><rect x="260" y="60" width="20" height="30"/>
+        <line x1="330" y1="64" x2="330" y2="108"/><rect x="320" y="70" width="20" height="28"/>
+      </g>
+      <text x="226" y="22" fill="#FFD60A" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700">AAP KYA KAROGE?</text>
+    </svg>
+    <div class="foot">
+      <button class="btn" id="startBtn" type="button">Start →</button>
+      <div class="fine">Signup ki zaroorat nahi. Pehle kheliye, score WhatsApp par paaiye.</div>
+    </div>
+  </section>
+
+  <!-- TYPE -->
+  <section class="screen" id="sType" hidden>
+    <h1 class="d" style="font-size:48px">Aap kis tarah ke<br><span class="y">trader hain?</span></h1>
+    <p class="sub" style="font-size:16px">Sawaal aapke trading style ke anusaar honge, aur har baar alag.</p>
+    <div class="types" id="types"></div>
+    <div class="foot" style="padding-top:22px"><button class="btn" id="goBtn" type="button" disabled>Shuru karein →</button></div>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="screen" id="sQ" hidden>
+    <div class="prog"><span id="qNum">SITUATION 1 / 7</span><span class="phase" id="phase">PADHIYE</span></div>
+    <div class="dots" id="dots"></div>
+    <div class="timerrow"><div class="timer" id="timer"><b id="timerBar"></b></div><span class="secs" id="secs">10</span></div>
+    <div class="scene"><span class="cat" id="qCat"></span><div class="tag" id="qTag"></div><h2 id="qText"></h2></div>
+    <div class="reading" id="reading">
+      <p>Dhyaan se padhiye. Options 10 second mein dikhenge.</p>
+      <button class="btn ghost" id="readyBtn" type="button">Padh liya, options dikhaiye</button>
+    </div>
+    <div class="opts" id="opts" hidden></div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+  </section>
+
+  <!-- PHONE -->
+  <section class="screen" id="sPhone" hidden>
+    <h1 class="d" style="font-size:50px">Game over.<br><span class="y">Score ready.</span></h1>
+    <div class="lock">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="20" width="32" height="24" rx="5" fill="#FFD60A"/><path d="M15 20v-6a9 9 0 0 1 18 0v6" fill="none" stroke="#FFD60A" stroke-width="5"/><circle cx="24" cy="31" r="3.5" fill="#111"/><rect x="22.5" y="32" width="3" height="6" rx="1.5" fill="#111"/></svg>
+      <p>Apna score aur saaton sawaalon ke sahi jawaab, explanation ke saath, WhatsApp par paaiye.</p>
+    </div>
+    <form class="formcard" id="phoneForm" novalidate>
+      <label for="fPhone">WhatsApp number
+        <div class="tel"><span>+91</span><input id="fPhone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder="98765 43210"></div>
+      </label>
+      <label class="consent" for="fConsent"><input id="fConsent" type="checkbox"> Send my score, answers and updates from Investapas on WhatsApp.</label>
+      <div class="err" id="err1" role="alert"></div>
+      <button class="btn onwhite" type="submit">Send my score →</button>
+      <div class="fine" style="color:var(--muted)">We never share your number. No tips, no spam.</div>
+    </form>
+  </section>
+
+  <!-- RESULT + OFFER -->
+  <section class="screen" id="sRes" hidden>
+    <div class="rescard">
+      <div class="brand"><span>INVESTAPAS</span><span>DISCIPLINE SCORE</span></div>
+      <div class="gauge"><span class="num" id="rNum">0</span><span class="of">/100</span><span class="lbl" id="rLbl"></span></div>
+      <div class="bar"><b id="rBar"></b></div>
+      <div class="ttype" id="rType"></div>
+      <p class="typeline" id="rLine"></p>
+      <div class="handle">SCREENSHOT LEKAR STORY PAR SHARE KAREIN · @INVESTAPAS</div>
+    </div>
+    <div class="sent"><i>✓</i><span id="sentTxt">Sahi jawaab aur explanation WhatsApp pe bhej diye.</span></div>
+
+    <div class="offer" id="offer">
+      <div class="ribbon">● SIRF AAJ · SIRF IS CAFE MEIN</div>
+      <h3 id="offerH">Free chai ya coffee aapke liye ☕</h3>
+      <p id="offerTxt"></p>
+      <div class="drinks" id="drinksRow">
+        <button class="pickdrink on" type="button" data-d="Chai" aria-pressed="true"><span>☕</span>Chai</button>
+        <button class="pickdrink" type="button" data-d="Coffee" aria-pressed="false"><span>🥤</span>Coffee</button>
+      </div>
+      <button class="btn onwhite" id="claimBtn" type="button">Register &amp; get token →</button>
+    </div>
+
+    <div class="cta" id="ctaRes" hidden>
+      <h3>Apni kamzoriyon par kaam karna hai?</h3>
+      <p>Free 1:1 mentorship session mein ek mentor aapki trading aadaton ko samjhega aur aapke liye niyam banayega. Tips nahi, sirf discipline.</p>
+      <div class="slots"><b></b>Limited slots this week</div>
+      <button class="btn" type="button" id="mentorBtn2">Book free session →</button>
+      <div class="fine" id="mentorDone2" hidden>Request mil gayi hai. Session link WhatsApp par bheja jayega.</div>
+    </div>
+    <div class="wa">
+      <div class="head"><i>I</i><div>Investapas<small>WhatsApp message preview</small></div></div>
+      <div class="bubble long" id="waText1"></div>
+      <div class="note">Preview of the English WhatsApp messages: the score first, then all 7 answers with explanations.</div>
+    </div>
+    <div class="again"><button class="link" type="button" id="retake1">Dobara kheliye</button></div>
+  </section>
+
+  <!-- REGISTER -->
+  <section class="screen" id="sReg" hidden>
+    <h1 class="d" style="font-size:48px">Bas ek step.<br><span class="y">Aapki <span id="regDrink">chai</span> taiyaar hai.</span></h1>
+    <form class="formcard" id="regForm" novalidate>
+      <label for="fName">Naam<input id="fName" type="text" autocomplete="name" placeholder="Rahul Sharma"></label>
+      <label for="fEmail">Email <small>(optional)</small><input id="fEmail" type="email" autocomplete="email" placeholder="you@email.com"></label>
+      <div class="kv"><span>WhatsApp</span><span id="regPhone"></span></div>
+      <div class="err" id="err2" role="alert"></div>
+      <button class="btn onwhite" type="submit">Get my token →</button>
+      <div class="fine" style="color:var(--muted)">One free drink per number.</div>
+    </form>
+  </section>
+
+  <!-- TOKEN -->
+  <section class="screen" id="sTok" hidden>
+    <h1 class="d" style="font-size:44px">Counter par<br><span class="y">yeh screen dikhaiye.</span></h1>
+    <div class="ticket">
+      <div class="tophalf">
+        <div class="brand"><span>INVESTAPAS</span><span id="tDate"></span></div>
+        <div class="what" id="tWhat">Free chai</div>
+        <div class="cafe" id="tCafe"></div>
+      </div>
+      <div class="cut"></div>
+      <div class="bottom">
+        <div class="lab">TOKEN NUMBER</div>
+        <div class="code" id="tCode"></div>
+        <div class="meta" id="tName"></div>
+        <div class="live"><b></b>VALID TODAY · ONE PER PERSON</div>
+      </div>
+    </div>
+    <div class="wa">
+      <div class="head"><i>I</i><div>Investapas<small>WhatsApp message preview</small></div></div>
+      <div class="bubble" id="waText2"></div>
+    </div>
+    <div class="cta">
+      <h3>Apni kamzoriyon par kaam karna hai?</h3>
+      <p>Free 1:1 mentorship session mein ek mentor aapki trading aadaton ko samjhega aur aapke liye niyam banayega. Tips nahi, sirf discipline.</p>
+      <div class="slots"><b></b>Limited slots this week</div>
+      <button class="btn" type="button" id="mentorBtn">Book free session →</button>
+      <div class="fine" id="mentorDone" hidden>Request mil gayi hai. Session link WhatsApp par bheja jayega.</div>
+    </div>
+    <div class="again"><button class="link" type="button" id="retake2">Dobara kheliye</button></div>
+  </section>
+</div>
+
+<script>
+(function(){
+  /* ===================== CONFIG (Savan: edit here) ===================== */
+  var CONFIG={
+    // Base URL of the quiz API. Same-origin — this page is served by the
+    // same backend that hosts /api/quiz/*, so it works under investapas.in
+    // or any domain this is deployed behind with no further edits.
+    API_BASE: window.location.origin,
+    // Demo only. When API_BASE is set, the page loads the place from GET /api/quiz/place?src=... instead,
+    // so new places added in the admin panel work with no code change.
+    CAFES:{
+      'cafe-casa':{name:'Cafe De Casa',code:'CDC',drinks:['Chai','Coffee']},
+      'cafe-piccolo':{name:'Piccolo Cafe',code:'PIC',drinks:['Coffee']},
+      'cafe-atb':{name:'Around the Block',code:'ATB',drinks:['Coffee']},
+      'cafe-mamaloca':{name:'Mamaloca',code:'MML',drinks:['Chai','Coffee']},
+      'csb-bhawarkuan':{name:'Chai Sutta Bar, Bhawarkuan',code:'CSB',drinks:['Chai','Coffee']},
+      'csb-56':{name:'Chai Sutta Bar, 56 Dukan',code:'C56',drinks:['Chai']},
+      'csb-annapurna':{name:'Chai Sutta Bar, Annapurna',code:'CSA',drinks:['Chai','Coffee']},
+      'cafe-jail':{name:'Jail Cafe',code:'JCF',drinks:['Chai','Coffee']}
+    },
+    READ_SECONDS:10, ANSWER_SECONDS:15, QUESTIONS:7
+  };
+  /* ==================================================================== */
+  var BANK=[{"id": "G1", "cat": "gen", "tag": "MARKET CLOSE · 3:30 PM", "q": "Aapke hisaab se kal Nifty kis direction mein jayega?", "o": ["Upar (bullish)", "Neeche (bearish)", "Kal ke market ke anusaar trade plan banaunga"], "c": 2, "why": "Market ki direction koi bhi pehle se tay nahi kar sakta. Disciplined trader prediction par nahi, apne trading plan par chalta hai.", "t": "Which way will Nifty go tomorrow?", "ae": "Plan based on tomorrow's market, don't predict it", "we": "Nobody can reliably predict market direction. Disciplined traders follow a plan, not a forecast."}, {"id": "G2", "cat": "gen", "tag": "RISK MANAGEMENT", "q": "Ek trade mein apne total trading capital ka kitna risk lena uchit hai?", "o": ["10%", "5%", "1–2%", "Jitna confidence, utna risk"], "c": 2, "why": "1–2% risk par lagatar 10 losses ke baad bhi aapka capital surakshit rehta hai aur aap trading jaari rakh sakte hain.", "t": "Risk per trade", "ae": "1–2% of total trading capital", "we": "At 1–2% risk, even 10 losses in a row leave your capital largely intact."}, {"id": "G3", "cat": "gen", "tag": "WIN RATE", "q": "Ek trader ka win rate 80% hai. Kya woh profitable hai?", "o": ["Haan, 80% win rate ka matlab profit hai", "Zaroori nahi, yeh har loss ke size par nirbhar karta hai", "Haan, agar woh rozana trade kare"], "c": 1, "why": "8 chhote profits ko 2 bade losses poori tarah khatam kar sakte hain. Sirf win rate se profitability tay nahi hoti.", "t": "Is an 80% win rate profitable?", "ae": "Not necessarily, it depends on the size of each loss", "we": "Two large losses can erase eight small wins. Win rate alone does not decide profitability."}, {"id": "G4", "cat": "gen", "tag": "RECOVERY MATH", "q": "₹1,00,000 ke capital par 50% loss ho gaya. Wapas ₹1,00,000 tak pahunchne ke liye kitna return chahiye?", "o": ["50%", "75%", "100%"], "c": 2, "why": "₹50,000 ko ₹1,00,000 banane ke liye capital double karna hoga. Isliye losses ko chhota rakhna sabse zaroori hai.", "t": "Recovering from a 50% loss", "ae": "100% return", "we": "₹50,000 must double to get back to ₹1,00,000. That is why keeping losses small matters most."}, {"id": "G5", "cat": "gen", "tag": "RISK-REWARD", "q": "In do trades mein se kaunsa behtar hai?", "o": ["90% chance ₹100 profit, 10% chance ₹2,000 loss", "40% chance ₹300 profit, 60% chance ₹100 loss"], "c": 1, "why": "Har 10 trades par pehla trade average ₹1,100 ka nuksaan deta hai, jabki doosra ₹600 ka munafa. Jeetne ki sambhavna se zyada risk-reward ratio mayne rakhta hai.", "t": "Which trade is better?", "ae": "40% chance of +₹300 vs 60% chance of -₹100", "we": "Over 10 trades the first loses about ₹1,100 and the second makes about ₹600. Risk-reward matters more than win probability."}, {"id": "G6", "cat": "gen", "tag": "LEVERAGE", "q": "Broker aapko 5x leverage de raha hai. Iska kya matlab hai?", "o": ["Paanch guna profit ka mauka", "Trading ke liye extra paisa", "Profit aur loss, dono paanch guna"], "c": 2, "why": "Leverage profit ke saath-saath loss ko bhi utna hi badhata hai.", "t": "What 5x leverage means", "ae": "Profit and loss are both multiplied 5x", "we": "Leverage multiplies losses exactly as much as profits."}, {"id": "G7", "cat": "gen", "tag": "TIPS GROUP", "q": "Ek Telegram group \"95% accuracy\" ka daava karta hai aur profit ke screenshots share karta hai. Aap kya karenge?", "o": ["Chhoti amount se follow karke dekhunga", "Paid membership le lunga", "Ignore karunga, screenshot koi saboot nahi hai"], "c": 2, "why": "Profit ke screenshots aasaani se banaye ja sakte hain. \"Guaranteed return\" ka daava apne aap mein ek red flag hai.", "t": "\"95% accuracy\" tips group", "ae": "Ignore it, screenshots are not proof", "we": "Profit screenshots are easy to fake. Any guaranteed-return claim is a red flag."}, {"id": "G8", "cat": "gen", "tag": "EMOTIONAL SIGNAL", "q": "Trade ke dauraan aapki dhadkan tez hai aur aap baar-baar P&L check kar rahe hain. Iska kya matlab hai?", "o": ["Yeh normal hai, sabke saath hota hai", "Aapki position size aapki risk capacity se zyada hai", "Market zyada volatile hai"], "c": 1, "why": "Jo trade aapka mental santulan bigaad de, uski position size aapke liye zyada badi hai.", "t": "Racing heart during a trade", "ae": "Your position size is too big", "we": "If a trade disturbs your calm, the position is too big for you."}, {"id": "G9", "cat": "gen", "tag": "DAILY LOSS LIMIT", "q": "Lagatar 3 losses ke baad aaj ki maximum loss limit hit ho gayi hai. Aap kya karenge?", "o": ["Recovery ke liye ek aakhri trade", "Quantity double karke ek hi trade mein recover", "Aaj trading band, kal review"], "c": 2, "why": "Daily loss limit isi din ke liye banayi jaati hai, jab emotions faisle lene lagte hain.", "t": "Daily maximum loss hit", "ae": "Stop trading for the day and review tomorrow", "we": "A daily loss limit exists for exactly the day when emotions start making decisions."}, {"id": "S1", "cat": "scalp", "tag": "SCALPING MATH", "q": "Aapka target ₹20 per lot hai aur stop-loss ₹40 per lot. Breakeven ke liye kitne pratishat trades jeetne honge (charges ke bina)?", "o": ["50%", "60%", "67%"], "c": 2, "why": "₹20 kamane ke liye ₹40 ka risk lene par har 3 mein se 2 trades jeetna zaroori hai. Charges jodne par yeh aur badh jaata hai.", "t": "Win rate needed: ₹20 target, ₹40 stop-loss", "ae": "About 67%", "we": "Risking ₹40 to make ₹20 means winning 2 of every 3 trades just to break even, more after charges."}, {"id": "S2", "cat": "scalp", "tag": "TRADING COST", "q": "Aap rozana 40 scalps lete hain aur har trade par ₹60 charges aur slippage lagta hai. Mahine mein 20 trading din. Sirf kharcha kitna hoga?", "o": ["₹2,400", "₹12,000", "₹48,000"], "c": 2, "why": "40 × ₹60 × 20 = ₹48,000. Zyada trades mein sabse nishchit kamai brokerage aur charges ki hoti hai.", "t": "Monthly cost of 40 scalps a day", "ae": "₹48,000", "we": "40 trades x ₹60 x 20 days = ₹48,000. With heavy trading, costs are the surest winner."}, {"id": "S3", "cat": "scalp", "tag": "LOSING STREAK", "q": "Kuch hi minutes mein lagatar 3 scalps loss mein gaye. Aap kya karenge?", "o": ["Speed badhakar jaldi recover karunga", "Timeframe aur chhota kar dunga", "15 minute ka break lekar screen se door rahunga"], "c": 2, "why": "Tez losses ke baad dimaag aur tez trades chahta hai. Break hi is cycle ko todta hai.", "t": "3 quick losses in a row", "ae": "Take a 15-minute break", "we": "After fast losses the mind wants faster trades. A break is what breaks the cycle."}, {"id": "S4", "cat": "scalp", "tag": "SCALPING ESSENTIAL", "q": "Scalping mein sabse zaroori kya hai?", "o": ["Tez reflexes", "Zyada se zyada trades", "Pehle se tay stop-loss aur target, jinhe trade ke beech na badla jaye"], "c": 2, "why": "Scalping mein sochne ka samay nahi hota. Niyam trade se pehle tay hone chahiye.", "t": "Most important thing in scalping", "ae": "Stop-loss and target fixed before the trade", "we": "There is no time to think while scalping. Rules must be set before the trade."}, {"id": "S5", "cat": "scalp", "tag": "SLIPPAGE", "q": "Aapne stop-loss ₹100 par lagaya, lekin fast market mein order ₹96 par execute hua. Aisa kyun hua?", "o": ["Broker ne galat execution kiya", "Stop-loss ka koi fayda nahi, lagana hi nahi chahiye", "Slippage: fast market mein stop-loss ka exact price guaranteed nahi hota"], "c": 2, "why": "Isliye position size chhoti rakhein, taaki slippage ke baad bhi loss niyantran mein rahe. Stop-loss hatana iska samadhan nahi hai.", "t": "Stop-loss at ₹100 filled at ₹96", "ae": "Slippage, stop-loss prices are not guaranteed in fast markets", "we": "Keep position size small so losses stay controlled after slippage. Removing the stop-loss is not the fix."}, {"id": "S6", "cat": "scalp", "tag": "OVERTRADING", "q": "2 ghante mein 30 trades, aur net P&L ₹0. Iska matlab kya hai?", "o": ["Breakeven hai, koi nuksaan nahi", "Achhi practice ho gayi", "Charges ke baad aap loss mein hain, aur samay va urja bhi gayi"], "c": 2, "why": "P&L shunya dikhta hai, lekin charges ne paisa le liya. 30 trades ki thakaan bhi ek keemat hai.", "t": "30 trades with zero P&L", "ae": "You are in loss after charges", "we": "Zero P&L before costs is a loss after charges, plus the fatigue of 30 trades."}, {"id": "S7", "cat": "scalp", "tag": "PLAN DRIFT", "q": "Aapka scalp galat direction mein gaya. Aapne socha \"thoda aur rukta hoon\", aur ab 10 minute ho gaye hain. Aap kya karenge?", "o": ["Ise swing trade bana ke hold karunga", "Average kar dunga", "Scalp ka plan khatam ho gaya hai, exit karunga"], "c": 2, "why": "Loss wale scalp ko swing trade banana plan nahi, sirf ummeed hai.", "t": "A losing scalp turned into a hold", "ae": "Exit, the scalp plan is over", "we": "Turning a losing scalp into a swing trade is hope, not a plan."}, {"id": "OB1", "cat": "ob", "tag": "TIME DECAY", "q": "Aapne expiry week ke Monday ko option kharida. Wednesday tak Nifty bilkul nahi hila. Aapke option ka kya hua?", "o": ["Price waisa hi hai", "Price badh gaya", "Price gir gaya"], "c": 2, "why": "Time decay (theta) ki wajah se market na hilne par bhi option buyer ka premium rozana ghatta hai, aur expiry ke paas sabse tezi se.", "t": "Market flat for 3 days, what happened to your option?", "ae": "The option lost value", "we": "Time decay (theta) reduces an option buyer's premium every day, fastest near expiry."}, {"id": "OB2", "cat": "ob", "tag": "DIRECTION SAHI, PHIR BHI LOSS", "q": "Nifty aapki direction mein 50 points chala, phir bhi aapka option loss mein hai. Aisa kaise?", "o": ["Broker ki galti", "Market manipulation", "Implied volatility (IV) giri aur time decay hua"], "c": 2, "why": "Option ka price sirf direction se nahi, volatility aur samay se bhi tay hota hai. IV girne par sahi direction ke bawajood loss ho sakta hai.", "t": "Right direction, still a loss", "ae": "Implied volatility fell and time decay hit", "we": "Options are priced on volatility and time, not just direction. A fall in IV can beat a correct view."}, {"id": "OB3", "cat": "ob", "tag": "EVENT DAY", "q": "Results ya Budget se pehle options ke premium kaafi badh jaate hain. Event ke baad aam taur par kya hota hai?", "o": ["Premium aur badh jaata hai", "Premium waisa hi rehta hai", "Premium gir jaata hai (IV crush)"], "c": 2, "why": "Event ka risk premium mein pehle se shaamil hota hai. Event ke baad yeh risk hat jaata hai aur premium gir jaata hai, chahe market move kare.", "t": "Option premiums after a big event", "ae": "Premiums usually fall (IV crush)", "we": "Event risk is priced in beforehand. Once the event passes, premiums often fall even if the market moves."}, {"id": "OB4", "cat": "ob", "tag": "SASTA OPTION", "q": "₹2 ka deep out-of-the-money option \"lottery\" ki tarah kharidna kaisa hai?", "o": ["Sasta hai, isliye risk kam hai", "100 guna ho sakta hai, try karna chahiye", "Yeh sasta isliye hai kyunki profit ki sambhavna bahut kam hai"], "c": 2, "why": "Aise adhiktar options shunya par expire hote hain. Kam keemat kam probability ka sanket hai.", "t": "Buying a ₹2 far out-of-the-money option", "ae": "It is cheap because it rarely pays off", "we": "Most such options expire worthless. A low price reflects a low probability."}, {"id": "OB5", "cat": "ob", "tag": "EXPIRY DAY · 3:00 PM", "q": "Expiry ke din 3 baje, ₹60 mein kharida gaya option ab ₹5 par hai. Aap kya karenge?", "o": ["Hold karunga, aakhri minute mein move aa sakta hai", "Aur kharid kar average karunga", "Bachi hui raashi bachaunga, aur agli baar stop-loss pehle tay karunga"], "c": 2, "why": "Aakhri minute ke chamatkar ke intezaar mein ₹5 bhi shunya ho jaata hai. Asli galti stop-loss na lagana thi.", "t": "Option bought at ₹60 is ₹5 on expiry day", "ae": "Save what is left and set a stop-loss next time", "we": "Waiting for a last-minute miracle usually turns ₹5 into zero. The real mistake was having no stop-loss."}, {"id": "OB6", "cat": "ob", "tag": "MAXIMUM LOSS", "q": "Option buyer ka maximum loss kitna ho sakta hai?", "o": ["Unlimited", "Diye gaye premium jitna", "Premium ka double"], "c": 1, "why": "Option buyer ka loss premium tak seemit hai. Phir bhi kai traders poora premium gawa dete hain, kyunki woh stop-loss nahi lagate.", "t": "An option buyer's maximum loss", "ae": "The premium paid", "we": "A buyer can lose only the premium, yet many lose all of it because they never use a stop-loss."}, {"id": "OB7", "cat": "ob", "tag": "STOP-LOSS PLACEMENT", "q": "Aapne ₹10,000 ka option kharida. Stop-loss kahan lagana chahiye?", "o": ["Stop-loss ki zaroorat nahi, loss pehle se seemit hai", "Premium 90% girne par", "Setup ke anusaar pehle se tay, taaki loss total capital ke 1–2% se zyada na ho"], "c": 2, "why": "\"Seemit loss\" ka matlab \"chhota loss\" nahi hai. Stop-loss aapke loss ko aapke capital ke anupaat mein chhota rakhta hai.", "t": "Stop-loss on a ₹10,000 option", "ae": "Pre-set so the loss stays within 1–2% of total capital", "we": "A limited loss is not the same as a small loss. A stop-loss keeps it small relative to your capital."}, {"id": "OB8", "cat": "ob", "tag": "OPTION BUYING", "q": "Option buying mein profit ke liye kya zaroori hai?", "o": ["Sirf sahi direction", "Sahi direction, sahi timing aur anukool volatility", "Sasta option"], "c": 1, "why": "Option buyer ke liye teeno cheezein sahi honi chahiye. Isliye position size chhoti aur exit plan pehle se tay rakhein.", "t": "What an option buyer needs to profit", "ae": "Right direction, right timing and favourable volatility", "we": "Option buyers need three things to go right, so keep position size small and exits planned."}, {"id": "OS1", "cat": "os", "tag": "SELLER KA PROFIT", "q": "Option seller ka maximum profit kitna ho sakta hai?", "o": ["Unlimited", "Mile hue premium jitna", "Premium ka double"], "c": 1, "why": "Seller ka profit premium tak seemit hai, isliye ek bada loss kai mahino ka profit khatam kar sakta hai.", "t": "An option seller's maximum profit", "ae": "The premium received", "we": "A seller's profit is capped at the premium, so one large loss can erase months of gains."}, {"id": "OS2", "cat": "os", "tag": "NAKED SELLING", "q": "Bina hedge ke (naked) option sell karne par maximum loss kitna ho sakta hai?", "o": ["Mile hue premium jitna", "Block hue margin jitna", "Bahut bada, margin se bhi zyada"], "c": 2, "why": "Bade gap ya crash mein naked selling ka loss block hue margin se bhi zyada ho sakta hai.", "t": "Maximum loss on a naked short option", "ae": "Very large, even beyond the margin", "we": "In a big gap or crash, a naked seller can lose more than the margin blocked."}, {"id": "OS3", "cat": "os", "tag": "CONSISTENT PREMIUM", "q": "Aapne 30 din lagatar chhota premium kamaya. 31ve din market mein bada gap aaya. Is strategy ka sach kya hai?", "o": ["Seller hamesha jeetta hai", "30 din ka profit surakshit hai", "Ek bada din poore mahine ka profit khatam kar sakta hai"], "c": 2, "why": "Lagatar chhote profits aur kabhi-kabhi bada nuksaan, bina hedge ke option selling ka yahi swabhav hai.", "t": "30 days of small profits, then a gap", "ae": "One big day can erase a month of profits", "we": "Steady small gains with rare large losses is the nature of unhedged selling."}, {"id": "OS4", "cat": "os", "tag": "PREMIUM DOUBLE", "q": "Aapke sell kiye gaye option ka premium ₹50 se ₹100 ho gaya. Aap kya karenge?", "o": ["Hold karunga, expiry tak gir jayega", "Aur sell karunga, behtar price mil raha hai", "Pehle se tay stop-loss par exit ya hedge karunga"], "c": 2, "why": "Loss wali position mein aur sell karna galti ko double karna hai. Option seller ka stop-loss bhi pehle se tay hona chahiye.", "t": "Sold premium doubled from ₹50 to ₹100", "ae": "Exit or hedge at your pre-set stop-loss", "we": "Adding to a losing short doubles the mistake. Sellers need a pre-set stop-loss too."}, {"id": "OS5", "cat": "os", "tag": "HEDGING", "q": "Option selling mein hedge (protective option kharidna) kyun zaroori hai?", "o": ["Zaroori nahi, isse profit kam hota hai", "Sirf naye traders ke liye hai", "Bade gap mein loss seemit karta hai, aur aksar margin bhi kam lagta hai"], "c": 2, "why": "Hedge thoda profit kam karta hai, lekin account ko ek bure din se bachata hai.", "t": "Why hedge when selling options?", "ae": "It caps losses in a big gap and often lowers margin", "we": "A hedge costs a little profit but protects the account from one disastrous day."}, {"id": "OS6", "cat": "os", "tag": "RBI POLICY DAY", "q": "RBI policy ya results ke din bina hedge ke straddle sell karna kaisa hai?", "o": ["Premium zyada hai, isliye sabse achha din", "ATM strike ho toh surakshit hai", "Sabse risky din, bada move kisi bhi direction mein aa sakta hai"], "c": 2, "why": "Premium isliye zyada hai kyunki risk zyada hai. Event ke din naked selling sabse khatarnak hoti hai.", "t": "Selling a naked straddle on event day", "ae": "The riskiest day, a big move can come either way", "we": "Premiums are high because risk is high. Event days are the worst time for naked selling."}, {"id": "OS7", "cat": "os", "tag": "WIN RATE TRAP", "q": "Ek option seller ka win rate 85% hai, phir bhi account loss mein hai. Kyun?", "o": ["Market rigged hai", "Broker charges ki wajah se", "Chhote profits aur kabhi-kabhi bahut bade losses"], "c": 2, "why": "Account ki growth win rate se nahi, profit aur loss ke size ke anupaat se tay hoti hai.", "t": "85% win rate but the account is down", "ae": "Small wins and occasional very large losses", "we": "The size of wins versus losses, not the win rate, decides if an account grows."}, {"id": "SW1", "cat": "swing", "tag": "RISK-REWARD", "q": "Aapka stop-loss ₹50 neeche aur target ₹100 upar hai. Breakeven ke liye kam se kam kitne pratishat trades jeetne honge (charges ke bina)?", "o": ["67%", "50%", "Lagbhag 34%"], "c": 2, "why": "1:2 risk-reward ratio par har 3 mein se 1 trade jeetna bhi breakeven hai. Achha risk-reward kam win rate mein bhi kaam karta hai.", "t": "Win rate needed: ₹50 stop-loss, ₹100 target", "ae": "About 34%", "we": "At 1:2 risk-reward, winning 1 in 3 already breaks even. Good risk-reward forgives a low win rate."}, {"id": "SW2", "cat": "swing", "tag": "GAP DOWN", "q": "Raat mein negative news aayi aur stock aapke stop-loss se neeche gap-down khula. Aap kya karenge?", "o": ["Gap fill hone ka intezaar karunga", "Average karunga", "Plan ke anusaar exit karunga, gap risk swing trading ka hissa hai"], "c": 2, "why": "Overnight gap mein stop-loss apne price par kaam nahi karta, isliye swing trading mein position size chhoti rakhi jaati hai.", "t": "Gap down below your stop-loss", "ae": "Exit as per plan, gap risk is part of swing trading", "we": "A stop-loss cannot protect against overnight gaps, which is why swing positions stay small."}, {"id": "SW3", "cat": "swing", "tag": "PROFIT PROTECTION", "q": "Aapka trade profit mein hai, lekin target se pehle market kamzor dikh raha hai. Aap kya karenge?", "o": ["Kuch nahi, target hi final hai", "Turant poori position exit karunga", "Trailing stop-loss lagaunga"], "c": 2, "why": "Trailing stop-loss se profit surakshit hota hai aur aage ka move bhi miss nahi hota.", "t": "In profit but the market is weakening", "ae": "Use a trailing stop-loss", "we": "A trailing stop-loss locks in profit while keeping the upside open."}, {"id": "SW4", "cat": "swing", "tag": "DIVERSIFICATION", "q": "Aapki 5 swing positions ek hi sector ke stocks mein hain. Kya yeh diversified portfolio hai?", "o": ["Haan, 5 alag stocks hain", "Haan, agar sab large cap hain", "Nahi, yeh sab ek saath gir sakte hain"], "c": 2, "why": "Ek hi sector ke 5 stocks asal mein ek hi bet ke 5 hisse hain.", "t": "5 positions in one sector", "ae": "Not diversified, they can fall together", "we": "Five stocks in one sector are five parts of the same bet."}, {"id": "SW5", "cat": "swing", "tag": "TRADE BANA INVESTMENT", "q": "Aapka swing trade 2 hafton se loss mein hai, aur aap ise \"long-term investment\" banane ki soch rahe hain. Yeh kya hai?", "o": ["Samajhdaari bhari long-term soch", "Dhairya", "Ummeed. Naam badalne se loss nahi badalta."], "c": 2, "why": "Trade ka plan fail ho chuka hai. Use investment kehna sirf loss ko chhupana hai.", "t": "Turning a losing swing trade into an investment", "ae": "That is hope, renaming the trade changes nothing", "we": "The plan has failed. Calling a losing trade an investment only hides the loss."}, {"id": "SW6", "cat": "swing", "tag": "NEWS-BASED TRADES", "q": "Weekend par 3 ghante news padhne ke baad aapne Monday ke liye 6 naye trades plan kiye. Aap kya karenge?", "o": ["Research ki hai, sabhi trades lunga", "Sabse achhe 2 trades lunga", "Sirf wahi trades lunga jo mere likhe hue setup se match karein"], "c": 2, "why": "News padhne se confidence aata hai, edge nahi. Trade tabhi lein jab woh aapke setup se match kare.", "t": "6 trades planned after weekend news reading", "ae": "Only those that match your written setup", "we": "Reading news builds confidence, not an edge. Trade only what fits your setup."}, {"id": "SW7", "cat": "swing", "tag": "BEST HABIT", "q": "Swing trader ki sabse upyogi aadat kaunsi hai?", "o": ["Har ghante chart check karna", "Har trade ka journal: entry ka kaaran, exit aur emotion", "Zyada stocks track karna"], "c": 1, "why": "Journal aapko aapki apni dohrayi hui galtiyan dikhata hai. Yeh sabse sasta aur sabse achha teacher hai.", "t": "Most useful swing trading habit", "ae": "A journal of every trade: reason, exit and emotion", "we": "A journal shows you your own repeated mistakes. It is the cheapest teacher you will have."}, {"id": "LT1", "cat": "lt", "tag": "MARKET CORRECTION", "q": "Market 20% gir gaya hai. Ek long-term investor ko kya karna chahiye?", "o": ["Ghabrakar sab bech dena", "Aage se investment band kar dena", "Plan ke anusaar SIP aur asset allocation jaari rakhna"], "c": 2, "why": "Long-term mein correction saamanya hai. Ghabrahat mein bechna hi asli loss ko pakka karta hai.", "t": "The market falls 20%", "ae": "Continue your SIP and allocation as planned", "we": "Corrections are normal over the long term. Panic selling is what locks in the loss."}, {"id": "LT2", "cat": "lt", "tag": "COMPOUNDING", "q": "₹10,000 maasik SIP, 20 saal tak, agar saalana 12% return mile. Lagbhag kitni raashi banegi?", "o": ["₹24 lakh", "₹50 lakh", "Lagbhag ₹1 crore"], "c": 2, "why": "Aapka kul nivesh sirf ₹24 lakh hai, baaki compounding ka parinaam hai. Return guaranteed nahi hote, lekin samay aur anushasan sabse bade karak hain.", "t": "₹10,000 monthly SIP for 20 years at 12% a year", "ae": "Around ₹1 crore", "we": "You invest only ₹24 lakh; compounding does the rest. Returns are not guaranteed, but time and discipline matter most."}, {"id": "LT3", "cat": "lt", "tag": "VALUE TRAP", "q": "Aapne stock ₹500 par kharida tha, ab woh ₹300 par hai. Kya yeh \"sasta\" hai?", "o": ["Haan, 40% discount par hai", "Haan, aur kharidna chahiye", "Zaroori nahi. Price girna sasta hone ka saboot nahi, business ki jaanch karein."], "c": 2, "why": "Price girne ka kaaran business ka kamzor hona bhi ho sakta hai. Sasta aur kamzor company mein fark samjhein.", "t": "Stock fell from ₹500 to ₹300, is it cheap?", "ae": "Not necessarily, check the business", "we": "A falling price may mean a weaker business. Cheap and broken look the same on a chart."}, {"id": "LT4", "cat": "lt", "tag": "PORTFOLIO MONITORING", "q": "Kya long-term portfolio rozana check karna chahiye?", "o": ["Haan, zaroori hai", "Har ghante", "Nahi, rozana dekhne se emotional faisle badhte hain"], "c": 2, "why": "Rozana ke utaar-chadhaav long-term plan ko kamzor karte hain. Quarterly review kaafi hai.", "t": "Checking a long-term portfolio daily", "ae": "No, a quarterly review is enough", "we": "Daily swings shake long-term plans. Reviewing every quarter is enough."}, {"id": "LT5", "cat": "lt", "tag": "PENNY STOCK TIP", "q": "Ek dost ne penny stock ke baare mein kaha: \"10 guna pakka hai\". Aap kya karenge?", "o": ["Thoda invest kar dunga", "Poora invest kar dunga", "Research ke bina nahi. \"Pakka\" shabd hi chetavni hai."], "c": 2, "why": "\"Guaranteed\" ya \"pakka\" return ka daava red flag hai. Pump-and-dump schemes aksar aise hi shuru hoti hain.", "t": "A friend's \"sure 10x\" penny stock", "ae": "Not without research, \"sure\" is a warning sign", "we": "Any guaranteed-return claim is a red flag. Pump-and-dump schemes often start exactly like this."}, {"id": "LT6", "cat": "lt", "tag": "CONCENTRATION RISK", "q": "Aapke portfolio ka 50% ek hi stock mein hai, jo 3 guna ho chuka hai. Aap kya karenge?", "o": ["Hold karunga, yeh winner hai", "Aur kharidunga", "Rebalancing par vichaar karunga, ek stock par itni nirbharta risk hai"], "c": 2, "why": "Ek stock ki ek negative khabar aadhe portfolio ko prabhavit kar sakti hai. Profit ko surakshit karna bhi discipline hai.", "t": "50% of the portfolio in one stock that tripled", "ae": "Consider rebalancing", "we": "One piece of bad news could hit half your portfolio. Protecting profits is discipline too."}, {"id": "LT7", "cat": "lt", "tag": "SABSE BADA RISK", "q": "Ek long-term investor ka sabse bada dushman kaun hai?", "o": ["Market crash", "Inflation", "Apna vyavhaar: ghabrahat mein bechna aur trend ke peeche bhaagna"], "c": 2, "why": "Market ne kai baar recover kiya hai. Investors ko sabse zyada nuksaan aksar unke apne galat samay par liye gaye faislon se hota hai.", "t": "A long-term investor's biggest enemy", "ae": "Their own behaviour: panic selling and chasing trends", "we": "Investors often lose most through their own badly timed decisions, not the market."}];
+  function getSrc(){
+    var m=/[?&]src=([^&#]+)/.exec(location.search); if(m) return decodeURIComponent(m[1]).toLowerCase();
+    var h=(location.hash||'').replace('#',''); return h?h.toLowerCase():'';
+  }
+  var SRC=getSrc(); if(!SRC && !CONFIG.API_BASE) SRC='csb-bhawarkuan'; // demo default so the preview shows the cafe offer
+  var CAFE=CONFIG.API_BASE?null:(CONFIG.CAFES[SRC]||null);
+  var TYPES=[['scalp','Scalper','Kuch minutes ke trades'],['ob','Option buyer','Calls aur puts kharidta hoon'],['os','Option seller','Options sell karta hoon'],
+    ['swing','Swing trader','Kuch din se kuch hafte'],['lt','Long-term investor','SIP aur long-term portfolio'],['mix','Sab kuch thoda','Har category se sawaal']];
+  var CATLABEL={gen:'ALL TRADERS',scalp:'SCALPER',ob:'OPTION BUYER',os:'OPTION SELLER',swing:'SWING',lt:'LONG-TERM'};
+  var READ=CONFIG.READ_SECONDS, ANS=CONFIG.ANSWER_SECONDS, N=CONFIG.QUESTIONS;
+  var chosen=null, set=[], idx=0, answers=[], phase='', tStart=0, raf=0, locked=false, phone='', drink='Chai', R=null, sessionId='';
+  var $=function(id){return document.getElementById(id)};
+  var screens=['sStart','sType','sQ','sPhone','sRes','sReg','sTok'];
+  function show(id){screens.forEach(function(s){$(s).hidden=(s!==id)});window.scrollTo(0,0);
+    $('topR').textContent={sQ:'STAY CALM',sRes:'YOUR RESULT',sReg:'FREE '+drink.toUpperCase(),sTok:CAFE?CAFE.name.toUpperCase():''}[id]||'DISCIPLINE TEST';}
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+  function api(path,body){
+    if(!CONFIG.API_BASE) return Promise.resolve(null);
+    return fetch(CONFIG.API_BASE+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(function(r){return r.json().then(function(j){if(!r.ok)throw j;return j})});
+  }
+  function drinkWords(ds){return ds.length>1?'chai ya coffee':ds[0].toLowerCase()}
+  function applyCafe(){
+    $('chaiChip').hidden=!CAFE;
+    if(!CAFE)return;
+    var ds=(CAFE.drinks&&CAFE.drinks.length)?CAFE.drinks:['Chai','Coffee'];
+    $('chaiChip').textContent='☕ FREE '+drinkWords(ds).toUpperCase().replace(' YA ','/');
+    $('offerH').textContent='Free '+drinkWords(ds)+' aapke liye ☕';
+    [].forEach.call(document.querySelectorAll('.pickdrink'),function(b){var on=ds.indexOf(b.dataset.d)>-1;b.hidden=!on;});
+    $('drinksRow').hidden=ds.length<2;
+    drink=ds[0];[].forEach.call(document.querySelectorAll('.pickdrink'),function(x){var on=x.dataset.d===drink;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});
+  }
+  if(CONFIG.API_BASE&&SRC){
+    // Fire-and-forget QR-scan tracking — never blocks the page on it.
+    fetch(CONFIG.API_BASE+'/api/quiz/visit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({src:SRC})}).catch(function(){});
+    fetch(CONFIG.API_BASE+'/api/quiz/place?src='+encodeURIComponent(SRC))
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(p){CAFE=(p&&p.offer)?{name:p.name,code:p.code,drinks:p.drinks}:null;applyCafe()})
+      .catch(function(){CAFE=null;applyCafe()});
+  } else applyCafe();
+
+  TYPES.forEach(function(t){
+    var b=document.createElement('button');b.type='button';b.className='type';b.setAttribute('aria-pressed','false');
+    b.innerHTML='<span></span><small></small>';b.querySelector('span').textContent=t[1];b.querySelector('small').textContent=t[2];
+    b.addEventListener('click',function(){chosen=t[0];[].forEach.call($('types').children,function(x){x.classList.remove('on');x.setAttribute('aria-pressed','false')});b.classList.add('on');b.setAttribute('aria-pressed','true');$('goBtn').disabled=false;});
+    $('types').appendChild(b);
+  });
+  for(var i=0;i<N;i++)$('dots').appendChild(document.createElement('i'));
+
+  function buildSet(){
+    var gen=shuffle(BANK.filter(function(q){return q.cat==='gen'}));
+    var pick;
+    if(chosen==='mix'){pick=shuffle(BANK).slice(0,N);}
+    else{var own=shuffle(BANK.filter(function(q){return q.cat===chosen}));pick=own.slice(0,4).concat(gen.slice(0,N-4));}
+    return shuffle(pick).map(function(q){return {q:q,order:shuffle(q.o.map(function(t,i){return i}))};});
+  }
+  function ask(){
+    locked=false;var q=set[idx].q;
+    $('qNum').textContent='SITUATION '+(idx+1)+' / '+N;
+    $('qTag').textContent=q.tag;$('qCat').textContent=CATLABEL[q.cat];$('qText').textContent=q.q;
+    $('toast').textContent='';$('toast').className='toast';
+    [].forEach.call($('dots').children,function(d,i){d.classList.toggle('on',i<=idx)});
+    $('opts').hidden=true;$('opts').innerHTML='';$('reading').hidden=false;
+    startPhase('read');
+  }
+  function startPhase(p){
+    phase=p;tStart=performance.now();
+    $('phase').textContent=p==='read'?'PADHIYE':'JAWAAB DIJIYE';
+    $('timer').className='timer'+(p==='ans'?' ans':'');
+    cancelAnimationFrame(raf);raf=requestAnimationFrame(tick);
+  }
+  function tick(now){
+    var dur=phase==='read'?READ:ANS, left=Math.max(0,dur-(now-tStart)/1000);
+    $('timerBar').style.transform='scaleX('+(left/dur)+')';
+    var hot=phase==='ans'&&left<=4;$('timer').classList.toggle('hot',hot);$('secs').classList.toggle('hot',hot);
+    $('secs').textContent=Math.ceil(left);
+    if(left<=0){if(phase==='read')showOpts();else timeout();return;}
+    raf=requestAnimationFrame(tick);
+  }
+  function showOpts(){
+    var item=set[idx];$('reading').hidden=true;var box=$('opts');box.innerHTML='';box.hidden=false;
+    item.order.forEach(function(oi,k){
+      var b=document.createElement('button');b.type='button';b.className='opt';
+      b.innerHTML='<b>'+String.fromCharCode(65+k)+'</b><span></span>';b.querySelector('span').textContent=item.q.o[oi];
+      b.addEventListener('click',function(){pick(oi,b)});box.appendChild(b);
+    });
+    startPhase('ans');
+  }
+  function timeout(){
+    if(locked)return;locked=true;
+    $('toast').textContent='Time up! Pressure mein faisla nahi ho paaya?';$('toast').className='toast bad';
+    answers.push({q:set[idx].q,picked:-1});setTimeout(next,1300);
+  }
+  function pick(oi,b){
+    if(locked)return;locked=true;cancelAnimationFrame(raf);b.classList.add('pick');
+    $('toast').textContent='Locked ✓';answers.push({q:set[idx].q,picked:oi});setTimeout(next,450);
+  }
+  function next(){idx++;if(idx<N)ask();else{cancelAnimationFrame(raf);show('sPhone');$('fPhone').focus();}}
+
+  $('startBtn').addEventListener('click',function(){show('sType')});
+  $('goBtn').addEventListener('click',function(){set=buildSet();idx=0;answers=[];show('sQ');ask();});
+  $('readyBtn').addEventListener('click',function(){if(phase==='read')showOpts()});
+  $('fPhone').addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,10)});
+
+  function compute(){
+    var correct=answers.filter(function(a){return a.picked===a.q.c}).length, score=Math.round(correct/N*100);
+    var t=correct===N?['Market Monk','Pressure mein bhi aap apne plan par tike rehte hain.','Rock solid']
+      :correct>=5?['Disciplined Sniper','Aap plan par chalte hain. Bas kuch aadatein aur pakki karni hain.','Strong discipline']
+      :correct>=3?['Emotional Trader','Aap sahi jawaab jaante hain, lekin pressure mein emotions faisle lete hain.','Needs work']
+      :['Impulsive Trader','Abhi market aapke emotions ka fayda utha raha hai. Ise badalna zaroori hai.','High risk zone'];
+    R={correct:correct,score:score,type:t};
+  }
+  $('phoneForm').addEventListener('submit',function(e){
+    e.preventDefault();var ph=$('fPhone').value.replace(/\D/g,''),err='';
+    if(!/^[6-9]\d{9}$/.test(ph))err='Please enter a valid 10-digit WhatsApp number.';
+    else if(!$('fConsent').checked)err='Please tick the box so we can send your score on WhatsApp.';
+    $('err1').textContent=err;if(err)return;
+    phone=ph;compute();
+    var btn=e.submitter||this.querySelector('button[type=submit]');btn.disabled=true;
+    api('/api/quiz/submit',{src:SRC,traderType:chosen,phone:phone,consent:true,
+      answers:answers.map(function(a){return {id:a.q.id,picked:a.picked}})})
+      .then(function(res){if(res&&res.sessionId)sessionId=res.sessionId;renderResult();show('sRes');})
+      .catch(function(x){$('err1').textContent=(x&&x.message)||'Something went wrong. Please try again.';})
+      .then(function(){btn.disabled=false});
+  });
+  function fmtPhone(p){return '+91 '+p.slice(0,5)+' '+p.slice(5)}
+  function renderResult(){
+    $('rType').textContent=R.type[0];$('rLine').textContent=R.type[1];$('rLbl').textContent=R.correct+' of '+N+' correct';
+    var el=$('rNum'),t0=performance.now();
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches)el.textContent=R.score;
+    else(function up(t){var p=Math.min(1,(t-t0)/1100);el.textContent=Math.round(R.score*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(up)})(t0);
+    setTimeout(function(){$('rBar').style.width=R.score+'%'},60);
+    $('sentTxt').textContent='Sahi jawaab aur explanation '+fmtPhone(phone)+' par WhatsApp kar diye gaye hain.';
+    $('offer').hidden=!CAFE;$('ctaRes').hidden=!!CAFE;
+    if(CAFE){$('offerTxt').textContent='';$('offerTxt').append('Register kijiye aur ');var b=document.createElement('b');b.textContent=CAFE.name;$('offerTxt').append(b,' ke counter par token dikhaiye. Bill Investapas dega.');}
+    var lines=['Hi! Here is your Investapas Trading Discipline result.','','Score: *'+R.correct+'/'+N+'* ('+R.score+'/100)','Trader type: *'+R.type[0]+'*','','*Your answers*'];
+    answers.forEach(function(a,i){
+      var ok=a.picked===a.q.c;
+      lines.push('',(i+1)+'. '+a.q.t, ok?'✅ Correct: '+a.q.ae:(a.picked<0?'⏱ Time ran out. ':'❌ Missed. ')+'Right answer: '+a.q.ae, 'Why: '+a.q.we);
+    });
+    lines.push('','Want to work on your weak spots? Book a free 1:1 mentorship session. Limited slots this week:','investapas.in/mentorship','','— Team Investapas');
+    $('waText1').innerHTML='';$('waText1').appendChild(bubble(lines.join('\n')));
+  }
+  function bubble(s){
+    var f=document.createDocumentFragment();
+    s.split(/(\*[^*\n]+\*)/).forEach(function(part){
+      if(/^\*[^*\n]+\*$/.test(part)){var b=document.createElement('b');b.textContent=part.slice(1,-1);f.appendChild(b);}
+      else f.appendChild(document.createTextNode(part));
+    });
+    var t=document.createElement('time'),d=new Date();t.textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');f.appendChild(t);
+    return f;
+  }
+  [].forEach.call(document.querySelectorAll('.pickdrink'),function(b){
+    b.addEventListener('click',function(){drink=b.dataset.d;[].forEach.call(document.querySelectorAll('.pickdrink'),function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on))});});
+  });
+  $('claimBtn').addEventListener('click',function(){$('regDrink').textContent=drink.toLowerCase();$('regPhone').textContent=fmtPhone(phone);show('sReg');$('fName').focus();});
+
+  $('regForm').addEventListener('submit',function(e){
+    e.preventDefault();var name=$('fName').value.trim(),em=$('fEmail').value.trim(),err='';
+    if(!name)err='Please enter your name.';
+    else if(em&&!/^\S+@\S+\.\S+$/.test(em))err='Please check your email address, or leave it empty.';
+    $('err2').textContent=err;if(err)return;
+    var btn=this.querySelector('button[type=submit]');btn.disabled=true;
+    api('/api/quiz/claim',{sessionId:sessionId,src:SRC,phone:phone,name:name,email:em,drink:drink})
+      .then(function(res){
+        var code=res&&res.token;
+        if(!code){var key='ip_token_'+phone;try{code=localStorage.getItem(key)}catch(x){}
+          if(!code){code=CAFE.code+'-'+(1000+Math.floor(Math.random()*9000));try{localStorage.setItem(key,code)}catch(x){}}}
+        showToken(name,code);
+      })
+      .catch(function(x){$('err2').textContent=(x&&x.message)||'Something went wrong. Please try again.';})
+      .then(function(){btn.disabled=false});
+  });
+  function showToken(name,code){
+    var d=new Date(),ds=d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+    $('tDate').textContent=ds.toUpperCase();$('tWhat').textContent='Free '+drink.toLowerCase();$('tCafe').textContent=CAFE.name;
+    $('tCode').textContent=code;$('tName').textContent=name+' · '+fmtPhone(phone);
+    var msg='Hi '+name.split(' ')[0]+', your free '+drink.toLowerCase()+' at '+CAFE.name+' is ready. ☕\n\nToken: *'+code+'*\n\nShow this message at the counter. Valid today only, one per person.\n\nThank you for taking the Investapas Discipline Test.\n— Team Investapas';
+    $('waText2').innerHTML='';$('waText2').appendChild(bubble(msg));
+    $('mentorDone').hidden=true;$('mentorBtn').hidden=false;
+    show('sTok');
+  }
+  function book(btn,done){btn.disabled=true;api('/api/quiz/mentorship',{sessionId:sessionId,phone:phone,src:SRC})
+    .then(function(){btn.hidden=true;done.hidden=false;}).catch(function(){btn.disabled=false;}).then(function(){btn.disabled=false});}
+  $('mentorBtn').addEventListener('click',function(){book($('mentorBtn'),$('mentorDone'))});
+  $('mentorBtn2').addEventListener('click',function(){book($('mentorBtn2'),$('mentorDone2'))});
+  function restart(){chosen=null;$('goBtn').disabled=true;[].forEach.call($('types').children,function(x){x.classList.remove('on')});$('fConsent').checked=false;$('mentorBtn2').hidden=false;$('mentorDone2').hidden=true;show('sStart');}
+  $('retake1').addEventListener('click',restart);$('retake2').addEventListener('click',restart);
+})();
+</script>
+
+</body>
+</html>

@@ -234,6 +234,11 @@ exports.deleteRecord = async function (db, table, condition) {
 	return content;
 }
 
+exports.executeQuery = async function (db, sql, params) {
+	let content = await dbcon.query(db, sql, params || []).catch(console.log);
+	return content;
+};
+
 exports.getNearestCamera = async function (db, latitude, longitude, radius) {
 
 	let content = await dbcon.query(db, `SELECT camera_info_Id, camera_Id, camera_info_event_Id,

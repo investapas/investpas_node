@@ -175,7 +175,7 @@ router.use(async function (req, res, next) {
 		}
 
 
-	} else if ((req.route.method).includes('OPTIONS')) {
+	} else if (req.method === 'OPTIONS') {
 		return response('Success', 200);
 	} else {
 		return next();

@@ -6,16 +6,51 @@ let { notFoundResponse, unauthorizedResponse } = require("../vars/apiResponse");
 exports.authentication = async (req, res, next) => {
     try {
         const token = req.headers.authorization;
-        if (!token) {
-            return unauthorizedResponse(res, "Token missing");
-        }
-        // Bearer token handle
+        if (!token) return unauthorizedResponse(res, "Token missing");
+
         const cleanToken = token.replace("Bearer ", "");
         const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
-        req.user = decoded;
-        next();
+
+        // User token (has dhanClientId)
+        if (decoded.dhanClientId) {
+            req.user = { dhanClientId: decoded.dhanClientId };
+            return next();
+        }
+
+        // Admin token (has admin_Id)
+        if (decoded.admin_Id) {
+            const admin = await dbquery.fetchSingleRecord(
+                constants.vals.defaultDB, 'admin',
+                `WHERE id = ${decoded.admin_Id} AND token = '${cleanToken}'`, '*'
+            );
+            if (!admin) return unauthorizedResponse(res, "Invalid admin token");
+            req.user = decoded;
+            return next();
+        }
+
+        return unauthorizedResponse(res, "Invalid token");
     } catch (error) {
         return unauthorizedResponse(res, "Invalid token");
+    }
+};
+
+// Website session token (phone-first account) — issued by /account/login
+// and /account/signup. Kept separate from `authentication` so a website
+// token can never reach the Dhan trading endpoints.
+exports.webAuthentication = async (req, res, next) => {
+    try {
+        const token = req.headers.authorization;
+        if (!token) return unauthorizedResponse(res, "Please log in.");
+
+        const decoded = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
+        if (decoded.type !== "web" || !decoded.userId) {
+            return unauthorizedResponse(res, "Invalid session. Please log in again.");
+        }
+
+        req.webUser = { userId: decoded.userId };
+        return next();
+    } catch (error) {
+        return unauthorizedResponse(res, "Session expired. Please log in again.");
     }
 };
 
